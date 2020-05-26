@@ -1,0 +1,81 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Fitness App</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+
+<link rel="stylesheet" type="text/css" href="/css/calories.css">
+<link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+<script src="calories.js"></script>
+</head>
+
+<body  onload="load()">
+        <div class="container" id="nav">
+                <li><a href="/">Home</a></li>
+                <li> <a class="calories" href="/calories">Calories Calculator</a></li>
+                <li><a href="#about">About</a></li>
+               </div>
+
+
+  <div class="container" id="title">
+<p>Calories Calculator</p>
+  </div>
+
+  <div class="container">
+    <table id="myTable">
+      <tr>
+        <th>Food Name</th>
+        <th>Mass/Quantity</th>
+        <th>Unit</th>
+        <th>Carbs</th>
+        <th>Fat</th>
+        <th>Protein</th>
+        <th>K Calories</th>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td></td>
+        <td><select name="unit">
+          <option value="gram">gram</option>
+          <option value="ounce">ounce</option>
+          <option value="pound">pound</option>
+          <option value="kilogram">kilogram</option>
+        </select></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr id="total">
+        <th>Total</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+      
+      
+
+    </table>
+
+
+    <button type="button" id="row" onclick="addRow()"> Add row</button>
+
+    <button type="button" id="search" onclick="search()">Search Info</button>
+
+ 
+  </div>
+ 
+  
+  
+</body>
+</html>

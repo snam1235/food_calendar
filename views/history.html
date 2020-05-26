@@ -1,0 +1,76 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Fitness App</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+
+<link rel="stylesheet" type="text/css" href="/css/calories.css">
+<link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+<script  src="history.js" ></script>
+</head>
+
+<body  >
+        <div class="container" id="nav">
+                <li><a href="/">Home</a></li>
+                <li> <a class="calories-user" href="/calories-user">Calories Calculator</a></li>
+                <li><a class = "history" href ="/history">Food History</a></li>
+                <li><a href="#about">About</a></li>
+               </div>
+               <div class="container" id="title">
+                    <p>My Food History</p>
+                      </div>
+
+  <div class="container">
+      
+  </div>
+  <div class="container">
+ 
+        <table id="myTable">
+          <tr>
+            <th>Food Name</th>
+            <th>Mass/Quantity</th>
+            <th>Unit</th>
+            <th>Carbs</th>
+            <th>Fat</th>
+            <th>Protein</th>
+            <th>K Calories</th>
+          </tr>
+    
+         
+          <tr id="total">
+            <th>Total</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+    
+          
+          
+    
+        </table>
+        <input type="date" name="day">
+        <select name="Meal">
+              <option value="breakfast">Breakfast</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
+            </select>
+        
+        <button  onclick='getData()' id="find">Find Data</button>
+     
+    </div>
+   
+
+ 
+
+  
+  
+</body>
+</html>
