@@ -9,10 +9,7 @@
     <meta name="author" content="SitePoint" />
 
     <link rel="stylesheet" type="text/css" href="/css/web.css" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap" rel="stylesheet">
     <script language="JavaScript"  src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
     <script src="/web.js"></script>
   </head>
@@ -24,6 +21,7 @@
 
     <form action="/login" method ="POST">
       <div class="container">
+        <label>Email</label>
         <input
           type="email"
           name="email"
@@ -32,6 +30,7 @@
           onblur="field_blur(this, 'email');"
           class="email"
         />
+        <label>Password</label>
         <input
           type="password"
           name="password"
@@ -44,7 +43,8 @@
         
         
         <button type="submit" class="signupbtn" id="btn1">Sign In</button>
-        <a href="/signup" id="signup">Or Click Here to SignUp</a>
+       
+        <a href="/signup" id="signup"><button type="button">Sign up</button></a>
        
         
       </div>

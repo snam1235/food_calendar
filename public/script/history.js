@@ -57,7 +57,9 @@ fetch('/history',options)
   else if(data.message=="fail"){
 alert("No entries for the selected Date and Time, Please Select Another Date and Time")
   }
-  
+  else if(data.message=="must login"){
+    alert("Please login to check your history")
+      }
   else{
     if(document.getElementById("myTable").rows.length>2){
       let i = 1

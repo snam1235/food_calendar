@@ -50,9 +50,20 @@ function redirect(req,res,next){
 
 //all static files 
 
-router.get('/',redirect,function(req,res){
-  res.sendFile(path.join(__dirname+'/views/index.html'));
+router.get('/',redirect,function(req,res,next){
   
+  res.sendFile(path.join(__dirname+'/views/index.html'),function(){
+    next()
+  });
+  
+  
+});
+router.get('/',function(req,res){
+  
+  console.log("got here")
+   delete req.session.error
+   return res.json({message:"must login"})
+ 
 });
 router.get('/calories',function(req,res){
   
@@ -65,9 +76,15 @@ router.get('/home',function(req,res){
   res.sendFile(path.join(__dirname+'/views/home.html'));
   
 });
-router.get('/history',function(req,res){
-  res.sendFile(path.join(__dirname+'/views/history.html'));
+router.get('/history', async function(req,res){
  
+  if(!req.user){
+    req.session.error = 'must login';
+    return res.redirect('/');
+  }
+  else{
+    return  res.sendFile(path.join(__dirname+'/views/history.html'));
+  }
 });
 
 router.get('/calories-user',function(req,res){
@@ -88,6 +105,7 @@ router.get('/index.js',function(req,res){
 
 router.get('/history.js',async function(req,res,next){
   res.sendFile(path.join(__dirname+'/public/script/history.js'));
+  
  
 });
 
@@ -154,9 +172,8 @@ router.get('/account', (req, res, next) => {
   return res.status(401).end();
 }, (req, res) => res.sendFile(path.join(__dirname+'/views/account.html')));
 
-router.post('/history',  (req, res) => {
-  console.log("called")  
-  console.log(req.body)
+router.post('/history',  (req, res,next ) => {
+   
   
     const date =dateModel.findOne({email:req.user.email , date:req.body.Date}).populate('breakfast')
     .populate('lunch')
