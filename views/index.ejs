@@ -1,0 +1,74 @@
+
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Fitness App</title>
+    <meta name="description" content="The HTML5 Herald" />
+    <meta name="author" content="SitePoint" />
+
+    <link rel="stylesheet" type="text/css" href="/css/web.css" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap" rel="stylesheet">
+    <script language="JavaScript"  src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
+    <script>
+    var message = <%- JSON.stringify(message) %>;          
+
+      if(message!="success") 
+      {  
+        alert(message);
+      }
+      
+      
+    </script>
+   
+  </head>
+
+  <body>
+    <div class="container" id="title">
+      <p>Welcome to the Web Fitness App</p>
+    </div>
+
+    <form action="/login" method ="POST">
+      <div class="container">
+        <label>Email</label>
+        <input
+          type="email"
+          name="email"
+         
+          onFocus="field_focus(this,'email');"
+          onblur="field_blur(this, 'email');"
+          class="email"
+        />
+        <label>Password</label>
+        <input
+          type="password"
+          name="password"
+        
+          onFocus="field_focus(this, 'password');"
+          onblur="field_blur(this, 'password');"
+          class="password"
+        />
+
+        
+        
+        <button type="submit" class="signupbtn" id="btn1">Sign In</button>
+       
+        <a href="/signup" id="signup"><button type="button">Sign up</button></a>
+       
+        
+      </div>
+    </form>
+
+
+   
+    <div class="container" id="nav">
+      <li><a class = "home" href ="/"></a></li>
+      <li><a class="calories" href="/calories">Calories Calculator</a></li>
+      <li><a class = "history" href ="/history">Food History</a></li>
+      
+    </div>
+  </body>
+</html>

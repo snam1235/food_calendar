@@ -26,6 +26,8 @@ db.connect();
 
 app.use(express.static('public'));
 
+
+app.set('view engine', 'ejs');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
@@ -52,45 +54,75 @@ function redirect(req,res,next){
 
 router.get('/',redirect,function(req,res,next){
   
-  res.sendFile(path.join(__dirname+'/views/index.html'),function(){
-    next()
-  });
+    return res.render("index",{message:"success"})
   
+})
   
-});
+
+
+/*
 router.get('/',function(req,res){
   
-  console.log("got here")
+   console.log("got here")
    delete req.session.error
    return res.json({message:"must login"})
  
 });
+*/
 router.get('/calories',function(req,res){
   
-  res.sendFile(path.join(__dirname+'/views/calories.html'));
+  res.render("calories")
 });
 router.get('/signup',redirect,function(req,res){
-  res.sendFile(path.join(__dirname+'/views/signup.html'));
+  res.render("signup")
 });
 router.get('/home',function(req,res){
-  res.sendFile(path.join(__dirname+'/views/home.html'));
+  res.render("home")
   
 });
 router.get('/history', async function(req,res){
  
   if(!req.user){
-    req.session.error = 'must login';
-    return res.redirect('/');
+    
+    res.render("index",{message:"Please login to check your history"})
+    
   }
   else{
-    return  res.sendFile(path.join(__dirname+'/views/history.html'));
+    return  res.render("history")
   }
 });
 
 router.get('/calories-user',function(req,res){
   
-  res.sendFile(path.join(__dirname+'/views/calories-user.html'));
+  res.render("calories-user")
 });
+
+router.get('/login', function(req, res) {
+  res.render("login")
+});
+
+router.get('/logout', function(req, res) {
+ req.logout();
+ return res.redirect('/');
+});
+
+
+
+router.post('/login',(req,res,next)=>{
+ 
+next()
+}, passport.authenticate('local', {
+  successRedirect: '/home',
+  failureRedirect: '/login',
+  failureFlash: true
+}));
+
+router.get('/account', (req, res, next) => {
+  if (req.user) 
+  {console.log(req.user)
+  return next();}
+  return res.status(401).end();
+}, (req, res) => res.render("account"));
 
 router.get('/calories.js',function(req,res){
   res.sendFile(path.join(__dirname+'/public/script/calories.js'));
@@ -108,7 +140,9 @@ router.get('/history.js',async function(req,res,next){
   
  
 });
-
+router.get('/web.js',function(req,res){
+  res.sendFile(path.join(__dirname+'/public/script/web.js'));
+});
 
 
 
@@ -145,32 +179,6 @@ router.post('/signup', async (req, res, next) => {
 });
 
 
-router.get('/login', function(req, res) {
-  res.sendFile(path.join(__dirname+'/views/login.html'));
-});
-
-router.get('/logout', function(req, res) {
- req.logout();
- return res.redirect('/');
-});
-
-
-
-router.post('/login',(req,res,next)=>{
- 
-next()
-}, passport.authenticate('local', {
-  successRedirect: '/home',
-  failureRedirect: '/login',
-  failureFlash: true
-}));
-
-router.get('/account', (req, res, next) => {
-  if (req.user) 
-  {console.log(req.user)
-  return next();}
-  return res.status(401).end();
-}, (req, res) => res.sendFile(path.join(__dirname+'/views/account.html')));
 
 router.post('/history',  (req, res,next ) => {
    
