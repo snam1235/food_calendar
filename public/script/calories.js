@@ -1,3 +1,5 @@
+
+
 let api;
 let url = `https://api.edamam.com/api/food-database/nutrients?app_id=e5c14086&app_key=79eb7de743744c10e88f13b79bc70f80`;
 
@@ -200,10 +202,10 @@ function search() {
       lastRow.cells[6].innerHTML = totalCal.toFixed(2) + "kcal";
     });
   }).catch(function(){
-
-    alert("Error: Please enter valid values")
-
-  })
+   Swal.fire({icon: 'error',
+   title: 'Error',
+   className: 'swal',
+   text: 'Please enter valid name/quantities'})})
 }
 
 function save(){
@@ -239,10 +241,13 @@ param.calories.push(calories[i].innerHTML)
   .then(res =>{ return res.json()})        
   .then(data => {
     if(data.message=="fail"){
-  alert("Please select a date")
+      Swal.fire({icon: 'error',
+      title: 'Error',
+      text: 'Please select a date'})
     }
     else{
-      alert("Successfully saved!")
+      Swal.fire({icon: "success",
+    title:"Saved!"})
     }
   })
 
