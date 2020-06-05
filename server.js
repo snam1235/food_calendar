@@ -53,9 +53,13 @@ function redirect(req,res,next){
 //all static files 
 
 router.get('/',redirect,function(req,res,next){
-  
+    if(req.session.login!=false){
     return res.render("index",{message:"success"})
-  
+    }
+    else{
+      req.session.login = true
+      return res.render("index",{message:"failure"})
+    }
 })
   
 
@@ -81,15 +85,23 @@ router.get('/home',function(req,res){
   
 });
 router.get('/history', async function(req,res){
- 
   if(!req.user){
-    
-    res.render("index",{message:"Please login to check your history"})
-    
+  req.session.login = false
+  res.redirect("/")
   }
+  else{
+    res.render("history")
+  }
+ /*
+  if(!req.user){
+    m = "Please login to check your history"
+    res.render("index",{message: m})
+    m = "success"
+  if(!req.user){
   else{
     return  res.render("history")
   }
+  */
 });
 
 router.get('/calories-user',function(req,res){

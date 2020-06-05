@@ -12,15 +12,18 @@
 
     <link rel="stylesheet" type="text/css" href="/css/web.css" />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script language="JavaScript"  src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
-    <script>
+    <script defer> 
+    
     var message = <%- JSON.stringify(message) %>;          
-
-      if(message!="success") 
-      {  
-        alert(message);
-      }
-      
+    
+    window.addEventListener('load', (event) => {
+      if(message!="success")
+       Swal.fire({icon:"info",
+       text:"Please login to check your history"
+      })
+}); 
       
     </script>
    
