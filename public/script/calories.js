@@ -112,6 +112,14 @@ function search() {
   for (let i = 0; i < table.rows.length - 2; i++) {
     var food = table.rows[i + 1].cells[0].innerHTML
     
+    if(food.includes("&nbsp")){
+      Swal.fire({icon: 'error',
+      title: 'Error',
+      className: 'swal',
+      text: 'Please enter valid name/quantities'})
+      return
+    }
+    
     food = food.trim().replace(" ","%20")
   
     if (food.length !== 0) {

@@ -4,7 +4,7 @@ const path = require('path');
 const router = express.Router();
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const flash = require('flash');
+const flash = require('express-flash');
 const popup = require('node-popup');
 const session = require('express-session');
 const mongoose = require('mongoose')
@@ -37,12 +37,12 @@ app.use(session({
   resave: true,
   store: new MongoStore({mongooseConnection:mongoose.connection})
 }));
-app.use(flash());
+
 //passport
 app.use(auth.initialize);
 app.use(auth.session);
 app.use(auth.setUser);
-
+app.use(flash());
 function redirect(req,res,next){
 
   if(req.user) return res.redirect('/home');
@@ -110,7 +110,8 @@ router.get('/calories-user',function(req,res){
 });
 
 router.get('/login', function(req, res) {
-  res.render("login")
+  m = req.flash('loginMessage')[0]
+  return res.render("login",{logins: m })
 });
 
 router.get('/logout', function(req, res) {
@@ -123,11 +124,14 @@ router.get('/logout', function(req, res) {
 router.post('/login',(req,res,next)=>{
  
 next()
+
 }, passport.authenticate('local', {
   successRedirect: '/home',
   failureRedirect: '/login',
   failureFlash: true
-}));
+})
+
+);
 
 router.get('/account', (req, res, next) => {
   if (req.user) 
@@ -205,7 +209,7 @@ router.post('/history',  (req, res,next ) => {
         else{
          
           if(days!=null){
-            console.log("itsgood")
+            console.log(days)
             if(req.body.Meal=="breakfast"){
        return res.json({ message: days.breakfast })
             }
