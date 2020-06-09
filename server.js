@@ -53,17 +53,16 @@ function redirect(req,res,next){
 //all static files 
 
 router.get('/',redirect,function(req,res,next){
+   m = req.flash('loginMessage')[0]
     if(req.session.login!=false){
-    return res.render("index",{message:"success"})
+    return res.render("index",{message:"success",logins:m})
     }
     else{
       req.session.login = true
-      return res.render("index",{message:"failure"})
+      return res.render("index",{message:"failure",logins:m})
     }
 })
   
-
-
 /*
 router.get('/',function(req,res){
   
@@ -92,21 +91,16 @@ router.get('/history', async function(req,res){
   else{
     res.render("history")
   }
- /*
-  if(!req.user){
-    m = "Please login to check your history"
-    res.render("index",{message: m})
-    m = "success"
-  if(!req.user){
-  else{
-    return  res.render("history")
-  }
-  */
 });
 
 router.get('/calories-user',function(req,res){
-  
+  if(!req.user){
+    req.session.login = false
+    res.redirect("/")
+    }
+    else{
   res.render("calories-user")
+    }
 });
 
 router.get('/login', function(req, res) {
@@ -127,7 +121,7 @@ next()
 
 }, passport.authenticate('local', {
   successRedirect: '/home',
-  failureRedirect: '/login',
+  failureRedirect: '/',
   failureFlash: true
 })
 
@@ -137,7 +131,9 @@ router.get('/account', (req, res, next) => {
   if (req.user) 
   {console.log(req.user)
   return next();}
-  return res.status(401).end();
+  req.session.login = false
+  return res.redirect("/");
+ 
 }, (req, res) => res.render("account"));
 
 router.get('/calories.js',function(req,res){

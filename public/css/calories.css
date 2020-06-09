@@ -3,10 +3,14 @@ html{
    
    
     font-family: 'IBM Plex Serif',"serif";
-    font-size:40px;
-    color:rgb(255, 255, 255);
-    
-    }
+    font-size: 40px;
+    height:100%;
+    background-image:url("/images/food.jpg");
+    background-position: center;
+    background-repeat: repeat-y;
+    background-size: cover;
+  }
+
     
     html:after{
     opacity:0.6;
@@ -24,19 +28,20 @@ html{
     }
     
     li{
-    display:inline;
-    padding-right:50px;
-    font-size:15px;
+      display:inline;
+      padding-right:50px;
+  
+      }
+ 
+    
+    a{
+      text-decoration: none;
+      color:white;
     }
     
-    #nav{
-    font-size:30px;  
-    overflow:hidden;
-    margin: 0 auto;
-    
-    
-    }
-    
+li a:hover {
+  background-color: #111;
+}
     #title{
     
         margin-top: 120px;
@@ -65,18 +70,18 @@ html{
 
       #total{
 
-        border: 2px solid blue;
-        color:blue;
+        border: 2px solid black;
+        color:black;
         
 
       }
 
 
     select{
-      width: 100px;
+      width: 100%;
       height:50px;
       text-align: center;
-
+      overflow: hidden;
     }
 
     [type="date"] {
@@ -99,15 +104,15 @@ html{
       height:40px;
     }
 
-    #row{
+    .row{
       font-size: 20px;
       transition-duration: 0.4s;
-      border: 2px solid blue;
+      border: 2px solid black
     }
     #search{
       font-size: 20px;
       transition-duration: 0.4s;
-      border: 2px solid green;
+      border: 2px solid black
     }
     #row:hover{
       background-color: orange; /* Green */
@@ -143,4 +148,8 @@ html{
       width: 100px;
       border: 2px solid orange;
 
+    }
+
+    .meal{
+      width:150px;
     }

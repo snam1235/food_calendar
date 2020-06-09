@@ -12,17 +12,24 @@
 
     <link rel="stylesheet" type="text/css" href="/css/web.css" />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script language="JavaScript"  src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
     <script defer> 
     
     var message = <%- JSON.stringify(message) %>;          
-    
+    var logins = <%- JSON.stringify(logins) %>
     window.addEventListener('load', (event) => {
       if(message!="success")
        Swal.fire({icon:"info",
-       text:"Please login to check your history"
+       text:"Please login to access this page"
       })
+      if(logins)
+       Swal.fire({icon:"error",
+       text:logins
+      })
+      
 }); 
       
     </script>
@@ -30,12 +37,18 @@
   </head>
 
   <body>
-    <div class="container" id="title">
-      <p>Welcome to the Web Fitness App</p>
-    </div>
+    <div class="container" >
+      <li><a href="/">Home</a></li>
+      <li> <a id="calories" href="/calories">Calories Calculator</a></li>
+      <li><a id= "history" href ="/history">My History</a></li>
+    
+     </div>
 
-    <form action="/login" method ="POST">
-      <div class="container">
+
+    <form action="/login" method ="POST" >
+      <div class="container" id="login">
+        
+        <i class="material-icons md-48 ">account_circle</i>
         <label>Email</label>
         <input
           type="email"
@@ -49,7 +62,7 @@
         <input
           type="password"
           name="password"
-        
+          height="20"
           onFocus="field_focus(this, 'password');"
           onblur="field_blur(this, 'password');"
           class="password"
@@ -67,11 +80,5 @@
 
 
    
-    <div class="container" id="nav">
-      <li><a class = "home" href ="/"></a></li>
-      <li><a class="calories" href="/calories">Calories Calculator</a></li>
-      <li><a class = "history" href ="/history">Food History</a></li>
-      
-    </div>
   </body>
 </html>

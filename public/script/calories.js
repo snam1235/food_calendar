@@ -40,26 +40,19 @@ function addRow() {
     element = lastRow.insertCell(2)
     var select = document.createElement("select")
     select.setAttribute("name","unit")
-
-    var option1 = document.createElement("option")
-    option1.value = "gram"
-    option1.text = "gram"
-    select.appendChild(option1)
-
-    var option2 = document.createElement("option")
-    option2.value = "ounce"
-    option2.text = "ounce"
-    select.appendChild(option2)
-
-    var option3 = document.createElement("option")
-    option3.value = "pound"
-    option3.text = "pound"
-    select.appendChild(option3)
-
-    var option4 = document.createElement("option")
-    option4.value = "kilogram"
-    option4.text = "kilogram"
-    select.appendChild(option4)
+    
+    
+    var units = ["Gram","Kilogram","Ounce","Pinch","Liter","Fluid Ounce","Gallon","Pint","Milliliter","Cup","Tablespoon","Teaspoon"]
+    
+    for(let i =0;i<units.length;i++){
+      
+      var option =  document.createElement("option")
+      
+      option.value = units[i]
+      option.text = units[i]
+      select.appendChild(option)
+    }
+    
 
     element.appendChild(select)
     
@@ -86,7 +79,16 @@ function addRow() {
     }
   }
 }
+function deleteRow(){
+  let table = document.getElementById("myTable");
+  let len = table.rows.length;
 
+if(len>=4)
+document.getElementById("myTable").deleteRow(len-1);
+
+
+
+}
 function search() {
   let table = document.getElementById("myTable");
   let urls = new Array();

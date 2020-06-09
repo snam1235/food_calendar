@@ -57,7 +57,7 @@ fetch('/history',options)
   else if(data.message=="fail"){
     Swal.fire({icon: 'error',
     title: 'Error',
-    text: 'No entries for the selected date and time, please enter another data and time'})
+    text: 'No entries for the selected date and time, please enter another date and time'})
   }
   else{
     if(document.getElementById("myTable").rows.length>2){
