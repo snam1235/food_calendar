@@ -27,7 +27,7 @@ const dateModel = require("../../models/user").dateInfo;
         else{
          
           if(days!=null){
-            console.log(days)
+            
             if(req.body.Meal=="breakfast"){
        return res.json({ message: days.breakfast })
             }
@@ -39,7 +39,7 @@ const dateModel = require("../../models/user").dateInfo;
                    }
           }
           else{
-            console.log("its bad")
+            
          return res.json({ message: "fail"})
          
           }

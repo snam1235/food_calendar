@@ -37,11 +37,11 @@ function addRow(infos) {
 }
 
 async function getData(){
-  console.log("yo")
+ 
 
   let param = {Meal:document.getElementsByName("Meal")[0].value.toString(), Date:document.getElementsByName('day')[0].value.toString()}
 
-  console.log(JSON.stringify(param))
+ 
 
   const options = {method: 'POST',body: JSON.stringify(param), headers: {
     "Content-Type": "application/json"
@@ -51,7 +51,9 @@ fetch('/history',options)
 .then(res =>{ return res.json()})        
 .then(data => {
   if(data==null){
-  console.log("error")
+    Swal.fire({icon: 'error',
+    title: 'Error',
+    text: 'Failed for unknown reason'})
 
 } 
   else if(data.message=="fail"){
@@ -62,23 +64,31 @@ fetch('/history',options)
   else{
     if(document.getElementById("myTable").rows.length>2){
       let i = 1
-      for(i;i<document.getElementById("myTable").rows.length-1;i++){
-        document.getElementById("myTable").deleteRow(i)
+      
+      for(i;i<document.getElementById("myTable").rows.length;i++){
+        
+        document.getElementById("myTable").deleteRow(1)
       }
     }
-    console.log(data.message)
+    
     let mealCount = data.message.length
     let i =0
+    
     for( i;i<mealCount-1;i++){
-      console.log(data.message[i])
-      addRow(data.message[i])
-
+      
+     addRow(data.message[i])
+     
     }
+   
     let lastRow = document.getElementById("myTable").rows[document.getElementById("myTable").rows.length-1]
     lastRow.cells[3].innerHTML = data.message[mealCount-1].carb
     lastRow.cells[4].innerHTML = data.message[mealCount-1].fat
     lastRow.cells[5].innerHTML = data.message[mealCount-1].protein
     lastRow.cells[6].innerHTML = data.message[mealCount-1].calories
+    
+
+ 
+    
   }
 
 

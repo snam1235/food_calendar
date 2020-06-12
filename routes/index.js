@@ -14,7 +14,6 @@ router.get('/',function(req,res,next){
   m = req.flash('message')[0]
 
   if(m){
-
   return res.render("index",{message:m})
   }
   else{
