@@ -48,7 +48,7 @@ function addRow() {
       
       var option =  document.createElement("option")
       
-      option.value = units[i]
+      option.value = units[i].toLowerCase()
       option.text = units[i]
       select.appendChild(option)
     }
@@ -63,7 +63,7 @@ function addRow() {
     element = lastRow.insertCell(4)
     element.setAttribute("name","fat")
 
-   element = lastRow.insertCell(5)
+    element = lastRow.insertCell(5)
     element.setAttribute("name","protein")
 
     element = lastRow.insertCell(6)
@@ -128,7 +128,7 @@ function search() {
       urls[
         j
       ] = `https://api.edamam.com/api/food-database/parser?ingr=${food}&app_id=e5c14086&app_key=79eb7de743744c10e88f13b79bc70f80`;
-
+      
       arr[j] = JSON.parse(JSON.stringify(str));
 
       arr[j].ingredients[0].quantity = parseInt(
@@ -136,7 +136,7 @@ function search() {
       );
 
       var unit = table.rows[i + 1].cells[2].children[0].value
-     
+      console.log(unit)
       var measure = `http://www.edamam.com/ontologies/edamam.owl#Measure_${unit}`;
       arr[j].ingredients[0].measureURI = measure;
       index[j] = i + 1;
@@ -159,7 +159,7 @@ function search() {
       arr[i].ingredients[0].foodId = data[i].parsed[0].food.foodId;
     }
 
-    console.log(arr);
+    
     Promise.all(
       arr.map(foods =>
         fetch(nutrients, {

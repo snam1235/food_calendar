@@ -12,7 +12,9 @@
 
 <link rel="stylesheet" type="text/css" href="/css/calories.css">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap" rel="stylesheet">
-<script src="calories.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+<script src="/script/calories.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
 
@@ -21,10 +23,13 @@
 
 <body onload="load()">
         <div class="container" id="nav">
-                <li><a href="/">Home</a></li>
+                <li><a href="/home">Home</a></li>
                 <li> <a class="calories-user" href="/calories-user">Calories Calculator</a></li>
                 <li><a class = "history" href ="/history">My History</a></li>
-                <li><a href="/account">Account</a></li>
+                <div class = "container" id="logout_box">
+                  <i class="material-icons md-48">account_circle</i>
+                  <a href="/logout" id="logout">Logout</a>
+              </div>
                </div>
 
 
@@ -36,11 +41,10 @@
     
 
     
-    <button type="button" id="row" onclick="addRow()"> Add row</button>
-    <div class="container" >
-    
+    <button type="button" class="row" onclick="addRow()"> Add row</button>
+    <button type="button" class="row" onclick="deleteRow()">Delete Row</button>
     <button type="button" id="search" onclick="search()" >Search Nutrition Facts</button>
-</div>
+    
    
       <table id="myTable">
         <tr>

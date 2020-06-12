@@ -19,7 +19,8 @@
     <script defer> 
     
     var message = <%- JSON.stringify(message) %>;          
-    var logins = <%- JSON.stringify(logins) %>
+    var logins = <%- JSON.stringify(logins) %>;
+    var signup = <%- JSON.stringify(signup) %>;
     window.addEventListener('load', (event) => {
       if(message!="success")
        Swal.fire({icon:"info",
@@ -28,6 +29,10 @@
       if(logins)
        Swal.fire({icon:"error",
        text:logins
+      })
+      if(signup)
+      Swal.fire({icon:"info",
+       text:signup
       })
       
 }); 

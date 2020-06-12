@@ -12,16 +12,21 @@
 
 <link rel="stylesheet" type="text/css" href="/css/calories.css">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"> 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-<script  src="history.js" ></script>
+<script  src="/script/history.js" ></script>
 </head>
 
 <body  >
         <div class="container" id="nav">
-                <li><a href="/">Home</a></li>
+                <li><a href="/home">Home</a></li>
                 <li> <a class="calories-user" href="/calories-user">Calories Calculator</a></li>
                 <li><a class = "history" href ="/history">My History</a></li>
-                <li><a href="/account">Account</a></li>
+                <div class = "container" id="logout_box">
+                  <i class="material-icons md-48">account_circle</i>
+                  <a href="/logout" id="logout">Logout</a>
+              </div>
                </div>
 
         <div class="container" id="title">

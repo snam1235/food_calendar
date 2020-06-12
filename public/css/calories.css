@@ -12,12 +12,7 @@ html{
   }
 
     
-    html:after{
-    opacity:0.6;
-    
-    
-    
-    }
+  
     
     
     .container{
@@ -100,7 +95,7 @@ li a:hover {
       background-color: #fff;
       padding: 3px 5px;
       box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
-      width: 190px;
+      width: 280px;
       height:40px;
     }
 
@@ -112,7 +107,8 @@ li a:hover {
     #search{
       font-size: 20px;
       transition-duration: 0.4s;
-      border: 2px solid black
+      border: 2px solid black;
+      
     }
     #row:hover{
       background-color: orange; /* Green */
@@ -153,3 +149,21 @@ li a:hover {
     .meal{
       width:150px;
     }
+    
+.material-icons.md-48{ 
+  font-size: 50px;
+  position: relative;
+  
+}
+#logout_box{
+  position:relative;
+  font-size:30px;
+  
+  background-color:rgba(226, 220, 220, 0.637);
+  width:200px;
+   
+}
+
+#logout{
+  color:black;
+}
