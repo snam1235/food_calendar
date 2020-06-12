@@ -4,7 +4,14 @@ const router = express.Router();
 
 
   router.get('/',function(req,res){
-    res.render("home")
+    
+    if(!req.user){
+      req.flash("message","Login to access this page")
+      res.redirect("/")
+      }
+      else{
+        res.render("home")
+      }
     
   });
 

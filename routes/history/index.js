@@ -6,7 +6,7 @@ const dateModel = require("../../models/user").dateInfo;
 
   router.get('/', async function(req,res){
     if(!req.user){
-    req.session.login = false
+    req.flash("message","Login to access this page")
     res.redirect("/")
     }
     else{

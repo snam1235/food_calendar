@@ -37,12 +37,6 @@ app.use(auth.initialize);
 app.use(auth.session);
 app.use(auth.setUser);
 app.use(flash());
-function redirect(req,res,next){
-
-  if(req.user) return res.redirect('/home');
-  return next()
-}
-
 
 //all static files 
 

@@ -9,7 +9,20 @@
             
                 <link rel="stylesheet" type="text/css" href="/css/signup.css" />
                 <script src="/script/signup.js"></script>
-            
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+                <script>
+                   var message = <%- JSON.stringify(message) %>;  
+
+                   window.addEventListener('load', (event) => {
+      
+      if(message!="none"){
+       Swal.fire({icon:"info",
+       text:message
+      })
+    }
+
+  }); 
+                </script>
               </head>
 <form action="/signup" method ="POST" id="myForm"style="border:1px solid #ccc">
     <div class="container">

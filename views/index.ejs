@@ -18,23 +18,30 @@
     <script language="JavaScript"  src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
     <script defer> 
     
-    var message = <%- JSON.stringify(message) %>;          
-    var logins = <%- JSON.stringify(logins) %>;
-    var signup = <%- JSON.stringify(signup) %>;
+    var message = <%- JSON.stringify(message) %>;    
+ 
+   
     window.addEventListener('load', (event) => {
-      if(message!="success")
+      
+      if(message!="none"){
        Swal.fire({icon:"info",
-       text:"Please login to access this page"
+       text:message
       })
-      if(logins)
+    }
+    /*
+      if(logins){
+        if(logins!="Successfully Logged In"){
        Swal.fire({icon:"error",
        text:logins
       })
-      if(signup)
+    }
+    }
+      if(signup){
       Swal.fire({icon:"info",
        text:signup
       })
-      
+    }
+    */
 }); 
       
     </script>

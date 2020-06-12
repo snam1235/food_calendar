@@ -10,11 +10,18 @@ const logout = require("./logout")
 const signup = require("./signup")
 
 
-
-
 router.get('/',function(req,res,next){
-  m = req.flash('loginMessage')[0]
-  s = req.flash("signupMessage")[0]
+  m = req.flash('message')[0]
+
+  if(m){
+
+  return res.render("index",{message:m})
+  }
+  else{
+    return res.render("index",{message:"none"})
+  }
+  //s = req.flash("signupMessage")[0]
+  /*
    if(req.session.login!=false){
    return res.render("index",{message:"success",logins:m,signup:s})
    }
@@ -22,6 +29,7 @@ router.get('/',function(req,res,next){
      req.session.login = true
      return res.render("index",{message:"failure",logins:m,signup:s})
    }
+   */
 })
 
 

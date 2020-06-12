@@ -6,11 +6,11 @@ const foodModel = require("../../models/user").foodInfo
 
   router.get('/',function(req,res){
     if(!req.user){
-      req.session.login = false
+      req.flash("message","Login to access this page")
       res.redirect("/")
       }
       else{
-    res.render("calories-user")
+        res.render("calories-user")
       }
   });
 
