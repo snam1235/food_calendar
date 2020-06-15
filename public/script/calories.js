@@ -89,134 +89,6 @@ document.getElementById("myTable").deleteRow(len-1);
 
 
 }
-function search() {
-  let table = document.getElementById("myTable");
-  let urls = new Array();
-  let arr = new Array();
-  let totalCarb = 0;
-  let totalPro = 0;
-  let totalFat = 0;
-  let totalCal = 0;
-  let index = new Array();
-
-  let str = {
-    ingredients: [
-      {
-        quantity: 100,
-        measureURI: "http://www.edamam.com/ontologies/edamam.owl#Measure_gram",
-        foodId: "food_bnbh4ycaqj9as0a9z7h9xb2wmgat"
-      }
-    ]
-  };
-
-  let j = 0;
-
-  for (let i = 0; i < table.rows.length - 2; i++) {
-    var food = table.rows[i + 1].cells[0].innerHTML
-    
-    if(food.includes("&nbsp")){
-      Swal.fire({icon: 'error',
-      title: 'Error',
-      className: 'swal',
-      text: 'Please enter valid name/quantities'})
-      return
-    }
-    
-    food = food.trim().replace(" ","%20")
-  
-    if (food.length !== 0) {
-      urls[
-        j
-      ] = `https://api.edamam.com/api/food-database/parser?ingr=${food}&app_id=e5c14086&app_key=79eb7de743744c10e88f13b79bc70f80`;
-      
-      arr[j] = JSON.parse(JSON.stringify(str));
-
-      arr[j].ingredients[0].quantity = parseInt(
-        table.rows[i + 1].cells[1].innerHTML
-      );
-
-      var unit = table.rows[i + 1].cells[2].children[0].value
-      console.log(unit)
-      var measure = `http://www.edamam.com/ontologies/edamam.owl#Measure_${unit}`;
-      arr[j].ingredients[0].measureURI = measure;
-      index[j] = i + 1;
-      j++;
-    }
-  }
-
-  Promise.all(
-    urls.map(url =>
-      fetch(url).then(response => {
-        return response.json();
-      })
-    )
-  ).then(data => {
-    let i;
-    let j;
-
-    for (i = 0; i < data.length; i++) {
-      let row = table.rows[i];
-      arr[i].ingredients[0].foodId = data[i].parsed[0].food.foodId;
-    }
-
-    
-    Promise.all(
-      arr.map(foods =>
-        fetch(nutrients, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(foods)
-        }).then(callback => {
-          return callback.json();
-        })
-      )
-    )
-    .then(result => {
-      console.log(result);
-      for (let i = 0; i < result.length; i++) {
-        let row = table.rows[index[i]];
-        
-        row.cells[3].innerHTML =
-          result[i].totalNutrients.CHOCDF.quantity.toFixed(2) +
-          result[i].totalNutrients.CHOCDF.unit;
-        row.cells[4].innerHTML =
-          result[i].totalNutrients.FAT.quantity.toFixed(2) +
-          result[i].totalNutrients.FAT.unit;
-        row.cells[5].innerHTML =
-          result[i].totalNutrients.PROCNT.quantity.toFixed(2) +
-          result[i].totalNutrients.PROCNT.unit;
-        row.cells[6].innerHTML =
-          result[i].totalNutrients.ENERC_KCAL.quantity.toFixed(2) +
-          result[i].totalNutrients.ENERC_KCAL.unit;
-        totalCarb += parseFloat(
-          result[i].totalNutrients.CHOCDF.quantity.toFixed(2)
-        );
-        totalFat += parseFloat(
-          result[i].totalNutrients.FAT.quantity.toFixed(2)
-        );
-
-        totalPro += parseFloat(
-          result[i].totalNutrients.PROCNT.quantity.toFixed(2)
-        );
-        totalCal += parseFloat(
-          result[i].totalNutrients.ENERC_KCAL.quantity.toFixed(2)
-        );
-      }
-
-      let lastRow = document.getElementById("total");
-      lastRow.cells[3].innerHTML = totalCarb.toFixed(2) + "g";
-      lastRow.cells[4].innerHTML = totalFat.toFixed(2) + "g";
-      lastRow.cells[5].innerHTML = totalPro.toFixed(2) + "g";
-      lastRow.cells[6].innerHTML = totalCal.toFixed(2) + "kcal";
-    });
-  }).catch(function(){
-   Swal.fire({icon: 'error',
-   title: 'Error',
-   className: 'swal',
-   text: 'Please enter valid name/quantities'})})
-}
 
 function save(){
 
@@ -260,6 +132,103 @@ param.calories.push(calories[i].innerHTML)
     title:"Saved!"})
     }
   })
+
+
+
+}
+
+
+
+function search(){
+  let foods = []
+  let units = []
+  let quantities = []
+  let table = document.getElementById("myTable");
+  let totalCarb = 0;
+  let totalPro = 0;
+  let totalFat = 0;
+  let totalCal = 0;
+
+
+  for (let i = 0; i < table.rows.length - 2; i++) {
+    let food = table.rows[i + 1].cells[0].innerHTML
+    if(food.includes("&nbsp") || food.length<=0){
+      Swal.fire({icon: 'error',
+      title: 'Error',
+      text: 'Please enter valid food names'})
+      return
+    }
+    food = food.trim().replace(" ","%20")
+    foods[i] = food
+    units[i]= table.rows[i + 1].cells[2].children[0].value
+
+    if((typeof table.rows[i + 1].cells[1].innerHTML)!="number"){
+      Swal.fire({icon: 'error',
+      title: 'Error',
+      text: 'Please enter valid quantities'})
+      return
+    }
+
+    quantities[i] = parseInt(
+      table.rows[i + 1].cells[1].innerHTML
+    );
+   
+    
+}
+
+let param = {Foods: foods, Quantities:quantities, Units:units}
+    const options = {method: 'POST',body: JSON.stringify(param), headers: {
+      "Content-Type": "application/json"
+    }}
+
+
+fetch('/search',options)
+.then(res =>{ return res.json()})  
+.then(result => {
+  if(result.error){
+    Swal.fire({icon: 'error',
+      title: 'Error',
+      text: 'Please enter valid food names'})
+
+      return
+  }
+  for (let i = 0; i < result.length; i++) {
+    let row = table.rows[i+1];
+    
+    row.cells[3].innerHTML =
+      result[i].totalNutrients.CHOCDF.quantity.toFixed(2) +
+      result[i].totalNutrients.CHOCDF.unit;
+    row.cells[4].innerHTML =
+      result[i].totalNutrients.FAT.quantity.toFixed(2) +
+      result[i].totalNutrients.FAT.unit;
+    row.cells[5].innerHTML =
+      result[i].totalNutrients.PROCNT.quantity.toFixed(2) +
+      result[i].totalNutrients.PROCNT.unit;
+    row.cells[6].innerHTML =
+      result[i].totalNutrients.ENERC_KCAL.quantity.toFixed(2) +
+      result[i].totalNutrients.ENERC_KCAL.unit;
+    totalCarb += parseFloat(
+      result[i].totalNutrients.CHOCDF.quantity.toFixed(2)
+    );
+    totalFat += parseFloat(
+      result[i].totalNutrients.FAT.quantity.toFixed(2)
+    );
+
+    totalPro += parseFloat(
+      result[i].totalNutrients.PROCNT.quantity.toFixed(2)
+    );
+    totalCal += parseFloat(
+      result[i].totalNutrients.ENERC_KCAL.quantity.toFixed(2)
+    );
+  }
+
+  let lastRow = document.getElementById("total");
+  lastRow.cells[3].innerHTML = totalCarb.toFixed(2) + "g";
+  lastRow.cells[4].innerHTML = totalFat.toFixed(2) + "g";
+  lastRow.cells[5].innerHTML = totalPro.toFixed(2) + "g";
+  lastRow.cells[6].innerHTML = totalCal.toFixed(2) + "kcal";
+
+});
 
 
 

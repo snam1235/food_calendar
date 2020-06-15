@@ -8,7 +8,7 @@ const home = require("./home")
 const login = require("./login")
 const logout = require("./logout")
 const signup = require("./signup")
-
+const search = require("./search")
 
 router.get('/',function(req,res,next){
   m = req.flash('message')[0]
@@ -39,6 +39,9 @@ router.use("/home",home)
 router.use("/login",login)
 router.use("/logout",logout)
 router.use("/signup",signup)
+router.use("/search",search)
+
+
 
 module.exports = router;
 
