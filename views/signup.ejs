@@ -1,52 +1,66 @@
 <!-- views/signup.ejs -->
 <html lang="eng">
+  <head>
+    <meta charset="utf-8" />
 
+    <link rel="stylesheet" type="text/css" href="/css/signup.css" />
+    <script src="/script/signup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+                       var message = <%- JSON.stringify(message) %>;
 
-        <head>
-                <meta charset="utf-8" />
-            
-                
-            
-                <link rel="stylesheet" type="text/css" href="/css/signup.css" />
-                <script src="/script/signup.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-                <script>
-                   var message = <%- JSON.stringify(message) %>;  
+                       window.addEventListener('load', (event) => {
+          // if error message on signup comes from server, show to user
+          if(message!="none"){
+            console.log(message)
+           Swal.fire({icon:"info",
+           text:message
+          })
+        }
 
-                   window.addEventListener('load', (event) => {
-      
-      if(message!="none"){
-       Swal.fire({icon:"info",
-       text:message
-      })
-    }
-
-  }); 
-                </script>
-              </head>
-<form action="/signup" method ="POST" id="myForm"style="border:1px solid #ccc">
+      });
+    </script>
+  </head>
+  <form
+    action="/signup"
+    method="POST"
+    id="myForm"
+    style="border: 1px solid #ccc;"
+  >
     <div class="container">
       <h1>Sign Up</h1>
       <p>Please fill in this form to create an account.</p>
-      <hr>
-  
+      <hr />
+
       <label for="email"><b>Email</b></label>
-      <input type="text" placeholder="Enter Email" name="email" required>
-  
+      <input type="text" placeholder="Enter Email" name="email" required />
+
       <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" id="pass" name="psw" required onchange='check_pass()'>
-  
+      <input
+        type="password"
+        placeholder="Enter Password"
+        id="pass"
+        name="psw"
+        required
+        oninput="check_pass()"
+      />
+
       <label for="psw-repeat"><b>Repeat Password</b></label>
-      <input type="password" placeholder="Repeat Password" id="passcheck" name="psw-repeat" required onchange='check_pass()'>
-  
-     
-  
-     
-  
+      <input
+        type="password"
+        placeholder="Repeat Password"
+        id="passcheck"
+        name="psw-repeat"
+        required
+        oninput="check_pass()"
+      />
+
       <div class="clearfix">
-        <button type="button"  onclick="location.href = '/';" class="cancelbtn">Cancel</button>
+        <button type="button" onclick="location.href = '/';" class="cancelbtn">
+          Cancel
+        </button>
         <button type="submit" id="submit" class="signupbtn">Sign Up</button>
       </div>
     </div>
   </form>
-  </html>
+</html>
