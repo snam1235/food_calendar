@@ -7,7 +7,7 @@ const flash = require("express-flash");
 const session = require("express-session");
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo")(session);
-passport = require("passport");
+const passport = require("passport");
 const db = require("./lib/db");
 const auth = require("./lib/auth");
 const port = 5000;
@@ -40,7 +40,7 @@ app.use(auth.setUser);
 //flash enables sending messages between routes
 app.use(flash());
 
-//apply routes
+//mount routes
 app.use("/", router);
 
 //connect to port

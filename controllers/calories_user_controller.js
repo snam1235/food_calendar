@@ -1,18 +1,15 @@
-const express = require("express");
-const router = express.Router();
-const dateModel = require("../../models/date");
-const foodModel = require("../../models/food");
-//render calories-user page only if user is logged in
-router.get("/", function (req, res) {
+const foodModel = require("../models/food.js");
+const dateModel = require("../models/date.js");
+
+module.exports.index = function (req, res) {
   if (!req.user) {
     req.flash("message", "Login to access this page");
     res.redirect("/");
   } else {
-    res.render("calories-user");
+    res.render("calories_user");
   }
-});
-//gets food data from client and saves the data to mongoDB
-router.post("/", async (req, res, next) => {
+};
+module.exports.save_food_model = async function (req, res, next) {
   let ids = new Array();
 
   let day;
@@ -35,19 +32,27 @@ router.post("/", async (req, res, next) => {
       ids[i] = food._id;
       let savedFood = await food.save();
     } catch (err) {
-      console.log(err);
-      return next(new Error("Failed to save user for unknown reasons"));
+      return res.json({ message: err });
     }
   }
+
+  res.locals.food_ids = ids;
+
+  next();
+};
+
+module.exports.save_date_model = async function (req, res) {
+  let day;
+  let ids = res.locals.food_ids;
   // populate data model with food data saved.
   const date = await dateModel
     .findOne({ email: req.user.email, date: req.body.day })
     .populate("breakfast")
     .populate("lunch")
     .populate("dinner")
-    .exec(function (error, days) {
+    .exec(function (err, days) {
       if (error) {
-        return console.log(error);
+        return res.json({ message: err });
       }
       // save according to meal type(breakfast, lunch dinner) when date doesn't exist in database
       if (days == null) {
@@ -68,9 +73,15 @@ router.post("/", async (req, res, next) => {
                 .populate("lunch")
                 .populate("dinner")
                 .exec(function (error, days) {
-                  console.log(JSON.stringify(days, null, "\t"));
-                  return res.json(days);
+                  if (!error) {
+                    console.log(JSON.stringify(days, null, "\t"));
+                    return res.json(days);
+                  } else {
+                    return res.json({ message: err });
+                  }
                 });
+            } else {
+              return res.json({ message: err });
             }
           });
         } else if (req.body.meal === "lunch") {
@@ -89,9 +100,15 @@ router.post("/", async (req, res, next) => {
                 .populate("lunch")
                 .populate("dinner")
                 .exec(function (error, days) {
-                  console.log(JSON.stringify(days, null, "\t"));
-                  return res.json(days);
+                  if (!error) {
+                    console.log(JSON.stringify(days, null, "\t"));
+                    return res.json(days);
+                  } else {
+                    return res.json({ message: err });
+                  }
                 });
+            } else {
+              return res.json({ message: err });
             }
           });
         } else {
@@ -110,9 +127,15 @@ router.post("/", async (req, res, next) => {
                 .populate("lunch")
                 .populate("dinner")
                 .exec(function (error, days) {
-                  console.log(JSON.stringify(days, null, "\t"));
-                  return res.json(days);
+                  if (!error) {
+                    console.log(JSON.stringify(days, null, "\t"));
+                    return res.json(days);
+                  } else {
+                    return res.json({ message: err });
+                  }
                 });
+            } else {
+              return res.json({ message: err });
             }
           });
         }
@@ -129,8 +152,12 @@ router.post("/", async (req, res, next) => {
             .populate("lunch")
             .populate("dinner")
             .exec(function (error, days) {
-              console.log(JSON.stringify(days, null, "\t"));
-              return res.json(days);
+              if (!error) {
+                console.log(JSON.stringify(days, null, "\t"));
+                return res.json(days);
+              } else {
+                return res.json({ message: err });
+              }
             });
         } else if (req.body.meal === "lunch") {
           dateModel
@@ -143,8 +170,12 @@ router.post("/", async (req, res, next) => {
             .populate("lunch")
             .populate("dinner")
             .exec(function (error, days) {
-              console.log(JSON.stringify(days, null, "\t"));
-              return res.json(days);
+              if (!error) {
+                console.log(JSON.stringify(days, null, "\t"));
+                return res.json(days);
+              } else {
+                return res.json({ message: err });
+              }
             });
         } else {
           dateModel
@@ -157,12 +188,14 @@ router.post("/", async (req, res, next) => {
             .populate("lunch")
             .populate("dinner")
             .exec(function (error, days) {
-              console.log(JSON.stringify(days, null, "\t"));
-              return res.json(days);
+              if (!error) {
+                console.log(JSON.stringify(days, null, "\t"));
+                return res.json(days);
+              } else {
+                return res.json({ message: err });
+              }
             });
         }
       }
     });
-});
-
-module.exports = router;
+};

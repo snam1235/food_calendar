@@ -1,17 +1,15 @@
-const express = require("express");
-const router = express.Router();
-const dateModel = require("../../models/date");
-//render history page only if user is logged in
-router.get("/", async function (req, res) {
+const dateModel = require("../models/date.js");
+
+module.exports.index = function (req, res) {
   if (!req.user) {
     req.flash("message", "Login to access this page");
     res.redirect("/");
   } else {
     res.render("history");
   }
-});
-//bring user's food data from mongoDb corresponding to the date entered
-router.post("/", (req, res, next) => {
+};
+
+module.exports.show_history = function (req, res) {
   const date = dateModel
     .findOne({ email: req.user.email, date: req.body.Date })
     .populate("breakfast")
@@ -34,6 +32,4 @@ router.post("/", (req, res, next) => {
         }
       }
     });
-});
-
-module.exports = router;
+};

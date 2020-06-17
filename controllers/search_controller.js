@@ -1,8 +1,6 @@
-const express = require("express");
-const router = express.Router();
 const fetch = require("node-fetch");
-// makes post request to food database API and sends the received data to client side
-router.post("/", function (req, res) {
+
+module.exports.search_nutrition = function (req, res) {
   // urls that makes post request and gets the foodID of each food
   let urls = new Array();
   //stores JSON body needed when making post request to get nutrition facts
@@ -71,6 +69,4 @@ router.post("/", function (req, res) {
     .catch((error) => {
       res.json({ error: error });
     });
-});
-
-module.exports = router;
+};

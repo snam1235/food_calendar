@@ -1,3 +1,5 @@
+
+//function that enables table cells to be editable
 function load() {
   let i;
 
@@ -7,7 +9,7 @@ function load() {
       [i].setAttribute("contenteditable", "true");
   }
 }
-
+//adds a row to table and sets corresponding attributes
 function addRow() {
   let table = document.getElementById("myTable");
   let len = table.rows.length;
@@ -77,7 +79,7 @@ function deleteRow() {
 
   if (len >= 4) document.getElementById("myTable").deleteRow(len - 1);
 }
-
+// this function saves the searched nutrition facts to the database for each user
 function save() {
   let param = {
     food: [],
@@ -101,6 +103,7 @@ function save() {
   let proteins = document.getElementsByName("protein");
   let calories = document.getElementsByName("calories");
   let i = 0;
+  //create post body
   for (i; i < len; i++) {
     param.food.push(names[i].innerHTML);
     param.mass.push(masses[i].innerHTML);
@@ -118,12 +121,13 @@ function save() {
       "Content-Type": "application/json",
     },
   };
-
+//post requrest and fetch response
   fetch("/calories-user", options)
     .then((res) => {
       return res.json();
     })
     .then((data) => {
+    // if server gives fail message, show alert message to client
       if (data.message == "fail") {
         Swal.fire({
           icon: "error",
@@ -135,7 +139,7 @@ function save() {
       }
     });
 }
-
+// this function makes a 3rd party API call to a food database to get nutritient facts for user's food input
 function search() {
   let foods = [];
   let units = [];
@@ -148,6 +152,7 @@ function search() {
 
   for (let i = 0; i < table.rows.length - 2; i++) {
     let food = table.rows[i + 1].cells[0].innerHTML;
+    //error message if food name is invalid
     if (food.includes("&nbsp") || food.length <= 0) {
       Swal.fire({
         icon: "error",
@@ -161,7 +166,7 @@ function search() {
     units[i] = table.rows[i + 1].cells[2].children[0].value;
 
     quantities[i] = parseInt(table.rows[i + 1].cells[1].innerHTML);
-
+    //error message if quantity/mass input is invalid
     if (typeof quantities[i] != "number") {
       Swal.fire({
         icon: "error",
@@ -171,7 +176,7 @@ function search() {
       return;
     }
   }
-
+// create post body 
   let param = { Foods: foods, Quantities: quantities, Units: units };
   const options = {
     method: "POST",
@@ -180,12 +185,13 @@ function search() {
       "Content-Type": "application/json",
     },
   };
-
+// make post request and fetch response
   fetch("/search", options)
     .then((res) => {
       return res.json();
     })
     .then((result) => {
+      // if response has error message, show to client
       if (result.error) {
         Swal.fire({
           icon: "error",
@@ -195,6 +201,7 @@ function search() {
 
         return;
       }
+      // else post response data from API to client
       for (let i = 0; i < result.length; i++) {
         let row = table.rows[i + 1];
 
@@ -224,7 +231,7 @@ function search() {
           result[i].totalNutrients.ENERC_KCAL.quantity.toFixed(2)
         );
       }
-
+      // total nutrition
       let lastRow = document.getElementById("total");
       lastRow.cells[3].innerHTML = totalCarb.toFixed(2) + "g";
       lastRow.cells[4].innerHTML = totalFat.toFixed(2) + "g";

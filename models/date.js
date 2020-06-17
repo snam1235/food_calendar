@@ -1,8 +1,4 @@
 const mongoose = require("mongoose");
-const relationship = require("mongoose-relationship");
-const bcrypt = require("bcryptjs");
-
-const emailValidator = require("email-validator");
 
 var Schema = mongoose.Schema;
 // date model representing one day of the user. contains entries for breakfast lunch dinner, relatonship set with food model

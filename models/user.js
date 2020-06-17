@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
-const relationship = require("mongoose-relationship");
 const bcrypt = require("bcryptjs");
-
-const emailValidator = require("email-validator");
 
 var Schema = mongoose.Schema;
 
@@ -19,11 +16,12 @@ var userSchema = new Schema({
 
   password: String,
 });
-
+// pre-function to activate when "save" is called
 userSchema.pre("save", async function preSave(next) {
   const user = this;
   if (!user.isModified("password")) return next();
   try {
+    //hashes passwords with 12 salt rounds
     const hash = await bcrypt.hash(user.password, SALT_ROUNDS);
     user.password = hash;
     return next();
@@ -31,7 +29,7 @@ userSchema.pre("save", async function preSave(next) {
     return next(err);
   }
 });
-
+// compare password function
 userSchema.methods.comparePassword = async function (candidate) {
   return bcrypt.compare(candidate, this.password);
 };

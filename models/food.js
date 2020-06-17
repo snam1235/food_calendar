@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
-const relationship = require("mongoose-relationship");
-const bcrypt = require("bcryptjs");
-
-const emailValidator = require("email-validator");
 
 var Schema = mongoose.Schema;
-
+// food model representing one row in the food calculator table
 var foodSchema = new Schema({
   name: String,
   mass: String,
