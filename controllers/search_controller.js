@@ -58,8 +58,8 @@ module.exports.search_nutrition = function (req, res) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(foods),
-          }).then((callback) => {
-            return callback.json();
+          }).then((response) => {
+            return response.json();
           })
         )
       ).then((result) => {

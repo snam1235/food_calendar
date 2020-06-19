@@ -1,5 +1,6 @@
 module.exports.index = function (req, res) {
   //flash message coming from different routes
+  res.setHeader("Cache-Control", "no-cache, no-store");
   m = req.flash("message")[0];
 
   if (m) {
