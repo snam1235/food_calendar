@@ -15,24 +15,17 @@ html {
   margin: auto;
 }
 
-li {
+.nav_contain {
   display: inline;
   padding-right: 50px;
 }
 
-h1 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: Red;
-}
-
-button {
+.button {
   font-size: 25px;
   color: black;
 }
 
-a {
+.nav_text {
   text-decoration: none;
   color: white;
 }
@@ -42,19 +35,18 @@ li a:hover {
 }
 .signup {
   font-size: 25px;
-  color: rgb(10, 230, 200);
 }
 
 .logout {
   color: Black;
 }
 
-label {
+.label {
   font-size: 25px;
   color: black;
 }
 
-p {
+.heading {
   position: relative;
   bottom: 120px;
 }
@@ -75,7 +67,7 @@ p {
   position: relative;
 }
 
-input {
+.input {
   font-size: 20px;
   width: 180px;
 }

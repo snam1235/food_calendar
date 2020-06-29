@@ -33,13 +33,25 @@ class Logout extends Component {
       });
   }
   render() {
+    const box_style = {
+      position: "relative",
+      fontSize: "30px",
+      backgroundColor: "rgba(226, 220, 220, 0.637)",
+      width: "200px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      margin: "auto",
+      height: "80px"
+    };
+
     if (this.state.redirectTo) {
       console.log("redirecting");
       return <Redirect to={this.state.redirectTo} />;
     } else {
       return (
-        <div className={cx(styles.container, styles.logout_box)}>
-          <AccountCircleIcon style={{ fontSize: 100 }} />
+        <div style={box_style}>
+          <AccountCircleIcon style={{ fontSize: 60 }} />
           <a onClick={this.handleLogout}>Logout</a>
         </div>
       );

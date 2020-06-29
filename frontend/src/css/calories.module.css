@@ -14,24 +14,11 @@ body {
   align-items: center;
 }
 
-li {
-  display: inline;
-  padding-right: 50px;
-}
-
-a {
-  text-decoration: none;
-  color: white;
-}
-
 .cal {
   text-decoration: none;
   color: white;
 }
 
-li a:hover {
-  background-color: #111;
-}
 #title {
   margin-top: 120px;
   color: orange;
@@ -59,7 +46,7 @@ td {
   width: 100px;
 }
 
-#total {
+.total {
   border: 2px solid black;
   color: black;
 }
@@ -98,7 +85,7 @@ input {
   transition-duration: 0.4s;
   border: 2px solid black;
 }
-#search {
+.search {
   font-size: 20px;
   transition-duration: 0.4s;
   border: 2px solid black;
@@ -107,11 +94,11 @@ input {
   background-color: orange;
   color: white;
 }
-#search:hover {
+.search:hover {
   background-color: orange;
   color: white;
 }
-#save {
+.save {
   top: 435px;
   right: 200px;
   font-size: 30px;
@@ -120,18 +107,18 @@ input {
   border: 2px solid orange;
 }
 
-#save:hover {
+.save:hover {
   background-color: orange; /* Green */
   color: white;
 }
-#find {
+.find {
   font-size: 20px;
   transition-duration: 0.4s;
   width: 100px;
   border: 2px solid orange;
 }
 
-#signup {
+.signup {
   transition-duration: 0.4s;
   width: 100px;
   border: 2px solid orange;
@@ -145,7 +132,7 @@ input {
   font-size: 50px;
   position: relative;
 }
-#logout_box {
+.logout_box {
   position: relative;
   font-size: 30px;
 

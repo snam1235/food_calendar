@@ -10,11 +10,12 @@ html {
   background-size: cover;
 }
 /* Full-width input fields */
-form {
+.myForm {
   background-color: rgba(226, 220, 220, 0.637);
+  border: 1px solid #ccc;
 }
-input[type="text"],
-input[type="password"] {
+.email,
+.password {
   width: 100%;
   padding: 15px;
   margin: 5px 0 22px 0;
@@ -23,19 +24,19 @@ input[type="password"] {
   background: #f1f1f1;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus {
+.email:focus,
+.password:focus {
   background-color: #ddd;
   outline: none;
 }
 
-hr {
+.theme {
   border: 1px solid #f1f1f1;
   margin-bottom: 25px;
 }
 
 /* Set a style for all buttons */
-button {
+.button {
   background-color: #4caf50;
   color: white;
   padding: 14px 20px;
@@ -46,7 +47,7 @@ button {
   opacity: 0.9;
 }
 
-button:hover {
+.button:hover {
   opacity: 1;
 }
 

@@ -4,6 +4,7 @@ import styles from "../css/web.module.css";
 import cx from "classnames";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import axios from "axios";
+
 class LoginForm extends Component {
   constructor() {
     super();
@@ -40,7 +41,7 @@ class LoginForm extends Component {
           });
           // update the state to redirect to home
           this.setState({
-            redirectTo: "/home"
+            redirectTo: "/user"
           });
         }
       })
@@ -57,27 +58,27 @@ class LoginForm extends Component {
         <form>
           <div className={cx(styles.container, styles.login)}>
             <AccountCircleIcon style={{ fontSize: 100 }} />
-            <label>Email</label>
+            <label className={styles.label}>Email</label>
             <input
               type="email"
               name="username"
-              className={styles.email}
+              className={styles.input}
               value={this.state.username}
               onChange={this.handleChange}
             />
-            <label>Password</label>
+            <label className={styles.label}>Password</label>
             <input
               type="password"
               name="password"
               height="20"
-              className={styles.password}
+              className={styles.input}
               value={this.state.password}
               onChange={this.handleChange}
             />
 
             <button
               type="submit"
-              className={styles.signupbtn}
+              className={styles.button}
               onClick={this.handleSubmit}
               id="btn1"
             >
@@ -85,7 +86,9 @@ class LoginForm extends Component {
             </button>
 
             <a href="/signup" className={styles.signup}>
-              <button type="button">Sign up</button>
+              <button className={styles.button} type="button">
+                Sign up
+              </button>
             </a>
           </div>
         </form>

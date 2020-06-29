@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import cx from "classnames";
-import styles from "./css/web.module.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+
+import { Switch, Route, Redirect } from "react-router-dom";
 import Table from "../src/components/table";
 import LoginForm from "../src/components/loginForm";
-import Logout from "../src/components/logout";
+
 import axios from "axios";
+import NavBar from "../src/components/navBar";
+import Signup from "../src/components/signup";
+import Swal from "sweetalert2";
 
 class App extends Component {
   constructor() {
@@ -29,17 +31,12 @@ class App extends Component {
 
   getUser() {
     axios.get("/home").then((response) => {
-      console.log("Get user response: ");
-      console.log(response.data);
       if (response.data.user) {
-        console.log("Get User: There is a user saved in the server session: ");
-
         this.setState({
           loggedIn: true,
           username: response.data.user.username
         });
       } else {
-        console.log("Get user: no user");
         this.setState({
           loggedIn: false,
           username: null
@@ -50,44 +47,94 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
-        <div className={styles.container}>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Route exact path="/">
-              <Link to="/calories" className={styles.cal}>
-                Calories
-              </Link>
-            </Route>
-            <Route path="/home">
-              <Link to="/calories-user" className={styles.cal}>
-                Calories
-              </Link>
-            </Route>
-          </li>
-          <li>
-            <a id="history" href="/history">
-              My History
-            </a>
-          </li>
-        </div>
+      <>
         <Switch>
-          <Route exact path="/">
-            <LoginForm updateUser={this.updateUser}></LoginForm>
-          </Route>
-          <Route path="/calories">
-            <Table></Table>
-          </Route>
-          <Route path="/calories-user">
-            <Table></Table>
-          </Route>
-          <Route path="/home">
-            <Logout updateUser={this.updateUser}></Logout>
-          </Route>
+          <Route
+            exact
+            path="/"
+            render={(props) => {
+              if (props.location.state) {
+                if (
+                  props.location.state.message === "Log In to Access this page"
+                ) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: props.location.state.message
+                  });
+                } else {
+                  Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: props.location.state.message
+                  });
+                }
+
+                window.history.pushState(null, "");
+              }
+              return (
+                <>
+                  <NavBar
+                    updateUser={this.updateUser}
+                    loggedIn={this.state.loggedIn}
+                  ></NavBar>
+                  <LoginForm updateUser={this.updateUser} />
+                </>
+              );
+            }}
+          ></Route>
+
+          <Route
+            exact
+            path="/calories"
+            render={() => (
+              <>
+                <NavBar
+                  updateUser={this.updateUser}
+                  loggedIn={this.state.loggedIn}
+                ></NavBar>
+                <Table></Table>
+              </>
+            )}
+          ></Route>
+
+          <Route
+            exact
+            path="/user/calories"
+            render={() => <Table></Table>}
+          ></Route>
+
+          <Route
+            path="/user"
+            render={() => {
+              if (this.loggedIn)
+                return (
+                  <NavBar
+                    updateUser={this.updateUser}
+                    loggedIn={this.state.loggedIn}
+                  ></NavBar>
+                );
+              else {
+                return (
+                  <Redirect
+                    to={{
+                      pathname: "/",
+                      state: { message: "Log In to Access this page" }
+                    }}
+                  ></Redirect>
+                );
+              }
+            }}
+          ></Route>
+
+          <Route
+            exact
+            path="/user/history"
+            render={() => <Table></Table>}
+          ></Route>
+          <Route exact path="/signup" render={() => <Signup />}></Route>
         </Switch>
-      </Router>
+      </>
     );
   }
 }

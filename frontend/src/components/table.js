@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import styles from "../css/calories.module.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
+
 class Table extends Component {
   constructor() {
     super();
@@ -9,6 +11,8 @@ class Table extends Component {
     this.deleteRow = this.deleteRow.bind(this);
     this.search = this.search.bind(this);
     this.save = this.save.bind(this);
+    this.addInfoRow = this.addInfoRow.bind(this);
+    this.getData = this.getData.bind(this);
   }
 
   componentDidMount() {
@@ -26,8 +30,6 @@ class Table extends Component {
     let len = table.rows.length;
 
     let lastRow = table.insertRow(len - 1);
-
-    let j;
 
     var element = lastRow.insertCell(0);
     element.setAttribute("name", "name");
@@ -106,6 +108,11 @@ class Table extends Component {
       let food = table.rows[i + 1].cells[0].innerHTML;
       //error message if food name is invalid
       if (food.includes("&nbsp") || food.length <= 0) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Please enter valid food names"
+        });
         return;
       }
       food = food.trim().replace(" ", "%20");
@@ -115,6 +122,11 @@ class Table extends Component {
       quantities[i] = parseInt(table.rows[i + 1].cells[1].innerHTML);
       //error message if quantity/mass input is invalid
       if (typeof quantities[i] != "number") {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Please enter valid quantities"
+        });
         return;
       }
     }
@@ -134,6 +146,11 @@ class Table extends Component {
 
       // if response has error message, show to client
       if (result.error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Please enter valid food names"
+        });
         return;
       }
       // else post response data from API to client
@@ -224,20 +241,93 @@ class Table extends Component {
       })
       .then((data) => {
         // if server gives fail message, show alert message to client
-        if (data.message == "fail") {
-          /*
+        if (data.message === "fail") {
           Swal.fire({
             icon: "error",
             title: "Error",
-            text: "Please select a date",
+            text: "Please select a date"
           });
-          */
-          alert("select a date");
         } else {
-          /*
           Swal.fire({ icon: "success", title: "Saved!" });
-          */
-          alert("saved");
+        }
+      });
+  }
+  addInfoRow(infos) {
+    let table = document.getElementById("myTable");
+    let len = table.rows.length;
+    var row = table.insertRow(len - 1);
+
+    row.insertCell(0).innerHTML = infos.name;
+    row.insertCell(1).innerHTML = infos.mass;
+    row.insertCell(2).innerHTML = infos.unit;
+    row.insertCell(3).innerHTML = infos.carb;
+    row.insertCell(4).innerHTML = infos.fat;
+    row.insertCell(5).innerHTML = infos.protein;
+    row.insertCell(6).innerHTML = infos.calories;
+  }
+  async getData() {
+    //gets user input
+    let param = {
+      Meal: document.getElementById("meal").value.toString(),
+      Date: document.getElementById("day").value.toString()
+    };
+
+    const options = {
+      method: "post",
+      data: JSON.stringify(param),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      url: "/history"
+    };
+    // make post request
+    axios(options)
+      .then((res) => {
+        return res.data;
+      })
+      .then((data) => {
+        // if response is failure show alert message to client
+        console.log(data);
+        if (data == null) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Failed for unknown reason"
+          });
+        } else if (data.message === "fail") {
+          alert(
+            "No entries for the selected date and time, please enter another date and time"
+          );
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text:
+              "No entries for the selected date and time, please enter another date and time"
+          });
+        } else {
+          // if response is success, show user's food history data in table
+          if (document.getElementById("myTable").rows.length > 2) {
+            let i = 1;
+
+            for (i; i < document.getElementById("myTable").rows.length; i++) {
+              document.getElementById("myTable").deleteRow(1);
+            }
+          }
+
+          let mealCount = data.message.length;
+          let i = 0;
+
+          for (i; i < mealCount - 1; i++) {
+            this.addInfoRow(data.message[i]);
+          }
+
+          let lastRow = document.getElementById("myTable").rows[
+            document.getElementById("myTable").rows.length - 1
+          ];
+          lastRow.cells[3].innerHTML = data.message[mealCount - 1].carb;
+          lastRow.cells[4].innerHTML = data.message[mealCount - 1].fat;
+          lastRow.cells[5].innerHTML = data.message[mealCount - 1].protein;
+          lastRow.cells[6].innerHTML = data.message[mealCount - 1].calories;
         }
       });
   }
@@ -245,74 +335,93 @@ class Table extends Component {
     return (
       <Router>
         <div class="container">
-          <Route path="/calories-user">
-            <button type="button" class="row" onClick={this.addRow}>
+          <Route exact path="/user/calories">
+            <button type="button" className={styles.row} onClick={this.addRow}>
               Add row
             </button>
-            <button type="button" class="row" onClick={this.deleteRow}>
+            <button
+              type="button"
+              className={styles.row}
+              onClick={this.deleteRow}
+            >
               Delete Row
             </button>
-            <button type="button" id="search" onClick={this.search}>
+            <button
+              type="button"
+              className={styles.search}
+              onClick={this.search}
+            >
               Search Nutrition Facts
             </button>
           </Route>
           <table id="myTable">
-            <tr>
-              <th>Food Name</th>
-              <th>Mass/Quantity</th>
-              <th>Unit</th>
-              <th>Carbs</th>
-              <th>Fat</th>
-              <th>Protein</th>
-              <th>K Calories</th>
-            </tr>
-
-            <tr>
-              <td></td>
-              <td></td>
-              <td>
-                <select name="unit">
-                  <option value="gram">Gram</option>
-                  <option value="kilogram">Kilogram</option>
-                  <option value="ounce">Ounce</option>
-                  <option value="pinch">Pinch</option>
-                  <option value="liter">Liter</option>
-                  <option value="fluid_ounce">Fluid Ounce</option>
-                  <option value="gallon">Gallon</option>
-                  <option value="pint">Pint</option>
-                  <option value="milliliter">Milliliter</option>
-                  <option value="cup">Cup</option>
-                  <option value="tablespoon">Tablespoon</option>
-                  <option value="teaspoon">Teaspoon</option>
-                </select>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr id="total">
-              <th>Total</th>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+            <tbody>
+              <tr>
+                <th>Food Name</th>
+                <th>Mass/Quantity</th>
+                <th>Unit</th>
+                <th>Carbs</th>
+                <th>Fat</th>
+                <th>Protein</th>
+                <th>K Calories</th>
+              </tr>
+              <Route path="/calories">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <select name="unit">
+                      <option value="gram">Gram</option>
+                      <option value="kilogram">Kilogram</option>
+                      <option value="ounce">Ounce</option>
+                      <option value="pinch">Pinch</option>
+                      <option value="liter">Liter</option>
+                      <option value="fluid_ounce">Fluid Ounce</option>
+                      <option value="gallon">Gallon</option>
+                      <option value="pint">Pint</option>
+                      <option value="milliliter">Milliliter</option>
+                      <option value="cup">Cup</option>
+                      <option value="tablespoon">Tablespoon</option>
+                      <option value="teaspoon">Teaspoon</option>
+                    </select>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </Route>
+              <tr className={styles.total}>
+                <th>Total</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
           </table>
-          <Route path="/calories">
-            <button type="button" class="row" onClick={this.addRow}>
+          <Route exact path="/calories">
+            <button type="button" className={styles.row} onClick={this.addRow}>
               Add row
             </button>
-            <button type="button" class="row" onClick={this.deleteRow}>
+            <button
+              type="button"
+              className={styles.row}
+              onClick={this.deleteRow}
+            >
               Delete Row
             </button>
-            <button type="button" id="search" onClick={this.search}>
+            <button
+              type="button"
+              className={styles.search}
+              onClick={this.search}
+            >
               Search Info
             </button>
           </Route>
-          <Route path="/calories-user">
+          <Route path="/user">
             <div class="container">
               <input type="date" id="day" />
               <select id="meal">
@@ -321,10 +430,17 @@ class Table extends Component {
                 <option value="lunch">Lunch</option>
                 <option value="dinner">Dinner</option>
               </select>
+              <Route path="/calories">
+                <button id="save" onClick={this.save}>
+                  Save
+                </button>
+              </Route>
 
-              <button id="save" onClick={this.save}>
-                Save
-              </button>
+              <Route>
+                <button onClick={this.getData} id="find">
+                  Find Data
+                </button>
+              </Route>
             </div>
           </Route>
         </div>

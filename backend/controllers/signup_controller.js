@@ -4,7 +4,7 @@ const emailValidator = require("email-validator");
 module.exports.index = function (req, res) {
   //res.render("signup", { message: "none" });
 };
-
+/*
 module.exports.check_preexist_user = async function (req, res, next) {
   const preexist = await UserModel.findOne({ email: req.body.email });
 
@@ -15,32 +15,27 @@ module.exports.check_preexist_user = async function (req, res, next) {
   }
   next();
 };
-
+*/
 module.exports.signup = async function (req, res) {
   // if email doesn't preexist, create and save user in database
   try {
     const user = new UserModel({
       email: req.body.email,
 
-      password: req.body.psw,
+      password: req.body.psw
     });
+
     if (emailValidator.validate(req.body.email) != true) {
-      return res.render("signup", {
-        message: "Please enter a valid email",
-      });
+      return res.send("Please enter valid email");
     }
     const savedUser = await user.save();
     //redirect to index page and flash appropraite message
     if (savedUser) {
-      req.session.id = req.body.email;
-      req.flash("message", "Successfully signed up!");
-      return res.redirect("/");
+      return res.send("Register Complete");
     } else {
-      return res.render("signup", {
-        message: "Failed to save user for unknown reasons",
-      });
+      return res.send("Failed to save to unknown reasons");
     }
   } catch (err) {
-    return res.render("signup", { message: err });
+    return res.send("Server Error");
   }
 };
