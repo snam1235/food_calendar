@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/signup_controller");
 //render html
-router.get("/", controller.index);
 
-router.post("/", controller.signup);
+router.post("/", controller.check_preexist_user, controller.signup);
 
 module.exports = router;

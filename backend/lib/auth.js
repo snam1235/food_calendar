@@ -22,6 +22,7 @@ passport.use(
         }
         //check password to authenticate user
         const passwordOK = await user.comparePassword(password);
+        console.log("passwordOk is", passwordOK);
         if (!passwordOK) {
           console.log("wrong psw");
           return done(
@@ -32,7 +33,7 @@ passport.use(
         }
         //successfully logged in
         console.log("login worked!");
-        return done(null, user), req.flash("message", "Successfully Logged In");
+        return done(null, user);
       } catch (err) {
         return done(err);
       }
@@ -61,5 +62,5 @@ module.exports = {
   setUser: (req, res, next) => {
     res.locals.user = req.user;
     return next();
-  },
+  }
 };

@@ -13,15 +13,15 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      loggedIn: false,
+      loggedIn: null,
       username: null
     };
     this.getUser = this.getUser.bind(this);
-    this.componentDidMount = this.componentDidMount.bind(this);
     this.updateUser = this.updateUser.bind(this);
   }
 
   componentDidMount() {
+    console.log("will mount");
     this.getUser();
   }
 
@@ -31,10 +31,11 @@ class App extends Component {
 
   getUser() {
     axios.get("/home").then((response) => {
-      if (response.data.user) {
+      console.log("get user", response.data);
+      if (response.data.username) {
         this.setState({
           loggedIn: true,
-          username: response.data.user.username
+          username: response.data.username
         });
       } else {
         this.setState({
@@ -46,68 +47,17 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <>
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={(props) => {
-              if (props.location.state) {
-                if (
-                  props.location.state.message === "Log In to Access this page"
-                ) {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: props.location.state.message
-                  });
-                } else {
-                  Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: props.location.state.message
-                  });
-                }
-
-                window.history.pushState(null, "");
-              }
-              return (
-                <>
-                  <NavBar
-                    updateUser={this.updateUser}
-                    loggedIn={this.state.loggedIn}
-                  ></NavBar>
-                  <LoginForm updateUser={this.updateUser} />
-                </>
-              );
-            }}
-          ></Route>
-
-          <Route
-            exact
-            path="/calories"
-            render={() => (
-              <>
-                <NavBar
-                  updateUser={this.updateUser}
-                  loggedIn={this.state.loggedIn}
-                ></NavBar>
-                <Table></Table>
-              </>
-            )}
-          ></Route>
-
-          <Route
-            exact
-            path="/user/calories"
-            render={() => <Table></Table>}
-          ></Route>
-
+    if (this.state.loggedIn == null) {
+      return null;
+    } else {
+      return (
+        <>
           <Route
             path="/user"
             render={() => {
-              if (this.loggedIn)
+              console.log("user");
+              console.log(this.state.loggedIn);
+              if (this.state.loggedIn)
                 return (
                   <NavBar
                     updateUser={this.updateUser}
@@ -115,6 +65,8 @@ class App extends Component {
                   ></NavBar>
                 );
               else {
+                console.log("redirecting", this.state.loggedIn);
+
                 return (
                   <Redirect
                     to={{
@@ -126,16 +78,76 @@ class App extends Component {
               }
             }}
           ></Route>
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={(props) => {
+                console.log("message props is", props.location.state);
+                console.log(this.state.loggedIn);
+                if (props.location.state) {
+                  if (
+                    props.location.state.message ===
+                    "Log In to Access this page"
+                  ) {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Error",
+                      text: props.location.state.message
+                    });
+                  } else {
+                    Swal.fire({
+                      icon: "success",
+                      title: "Success",
+                      text: props.location.state.message
+                    });
+                  }
+                  props.location.state = null;
+                }
+                return (
+                  <>
+                    <NavBar
+                      updateUser={this.updateUser}
+                      loggedIn={this.state.loggedIn}
+                    ></NavBar>
+                    <LoginForm updateUser={this.updateUser} />
+                  </>
+                );
+              }}
+            ></Route>
 
-          <Route
-            exact
-            path="/user/history"
-            render={() => <Table></Table>}
-          ></Route>
-          <Route exact path="/signup" render={() => <Signup />}></Route>
-        </Switch>
-      </>
-    );
+            <Route
+              exact
+              path="/calories"
+              render={() => (
+                <>
+                  <NavBar
+                    updateUser={this.updateUser}
+                    loggedIn={this.state.loggedIn}
+                  ></NavBar>
+                  <Table></Table>
+                </>
+              )}
+            ></Route>
+
+            <Route
+              exact
+              path="/user/calories"
+              render={() => {
+                return <Table></Table>;
+              }}
+            ></Route>
+
+            <Route
+              exact
+              path="/user/history"
+              render={() => <Table></Table>}
+            ></Route>
+            <Route exact path="/signup" render={() => <Signup />}></Route>
+          </Switch>
+        </>
+      );
+    }
   }
 }
 

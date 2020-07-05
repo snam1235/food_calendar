@@ -15,11 +15,9 @@ class NavBar extends Component {
   }
 
   handleLogout(event) {
-    console.log("yoyo");
     axios
       .get("/logout")
       .then((response) => {
-        console.log("clicked!");
         this.props.updateUser({
           loggedIn: false,
           username: null

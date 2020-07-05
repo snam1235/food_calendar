@@ -17,4 +17,7 @@ module.exports.check_empty_login = function (req, res, next) {
   next();
 };
 
-module.exports.authenticate = passport.authenticate("local");
+module.exports.authenticate = passport.authenticate("local", {
+  failureRedirect: "/login_fail",
+  failureFlash: true
+});

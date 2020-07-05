@@ -121,7 +121,7 @@ class Table extends Component {
 
       quantities[i] = parseInt(table.rows[i + 1].cells[1].innerHTML);
       //error message if quantity/mass input is invalid
-      if (typeof quantities[i] != "number") {
+      if (isNaN(quantities[i])) {
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -333,118 +333,100 @@ class Table extends Component {
   }
   render() {
     return (
-      <Router>
-        <div class="container">
-          <Route exact path="/user/calories">
-            <button type="button" className={styles.row} onClick={this.addRow}>
-              Add row
-            </button>
-            <button
-              type="button"
-              className={styles.row}
-              onClick={this.deleteRow}
-            >
-              Delete Row
-            </button>
-            <button
-              type="button"
-              className={styles.search}
-              onClick={this.search}
-            >
-              Search Nutrition Facts
-            </button>
-          </Route>
-          <table id="myTable">
-            <tbody>
+      <div class="container">
+        <Route exact path="/user/calories">
+          <button type="button" className={styles.row} onClick={this.addRow}>
+            Add row
+          </button>
+          <button type="button" className={styles.row} onClick={this.deleteRow}>
+            Delete Row
+          </button>
+          <button type="button" className={styles.search} onClick={this.search}>
+            Search Nutrition Facts
+          </button>
+        </Route>
+        <table id="myTable">
+          <tbody>
+            <tr>
+              <th>Food Name</th>
+              <th>Mass/Quantity</th>
+              <th>Unit</th>
+              <th>Carbs</th>
+              <th>Fat</th>
+              <th>Protein</th>
+              <th>K Calories</th>
+            </tr>
+            <Route path="/calories">
               <tr>
-                <th>Food Name</th>
-                <th>Mass/Quantity</th>
-                <th>Unit</th>
-                <th>Carbs</th>
-                <th>Fat</th>
-                <th>Protein</th>
-                <th>K Calories</th>
-              </tr>
-              <Route path="/calories">
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <select name="unit">
-                      <option value="gram">Gram</option>
-                      <option value="kilogram">Kilogram</option>
-                      <option value="ounce">Ounce</option>
-                      <option value="pinch">Pinch</option>
-                      <option value="liter">Liter</option>
-                      <option value="fluid_ounce">Fluid Ounce</option>
-                      <option value="gallon">Gallon</option>
-                      <option value="pint">Pint</option>
-                      <option value="milliliter">Milliliter</option>
-                      <option value="cup">Cup</option>
-                      <option value="tablespoon">Tablespoon</option>
-                      <option value="teaspoon">Teaspoon</option>
-                    </select>
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </Route>
-              <tr className={styles.total}>
-                <th>Total</th>
                 <td></td>
                 <td></td>
+                <td>
+                  <select name="unit">
+                    <option value="gram">Gram</option>
+                    <option value="kilogram">Kilogram</option>
+                    <option value="ounce">Ounce</option>
+                    <option value="pinch">Pinch</option>
+                    <option value="liter">Liter</option>
+                    <option value="fluid_ounce">Fluid Ounce</option>
+                    <option value="gallon">Gallon</option>
+                    <option value="pint">Pint</option>
+                    <option value="milliliter">Milliliter</option>
+                    <option value="cup">Cup</option>
+                    <option value="tablespoon">Tablespoon</option>
+                    <option value="teaspoon">Teaspoon</option>
+                  </select>
+                </td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
               </tr>
-            </tbody>
-          </table>
-          <Route exact path="/calories">
-            <button type="button" className={styles.row} onClick={this.addRow}>
-              Add row
-            </button>
-            <button
-              type="button"
-              className={styles.row}
-              onClick={this.deleteRow}
-            >
-              Delete Row
-            </button>
-            <button
-              type="button"
-              className={styles.search}
-              onClick={this.search}
-            >
-              Search Info
-            </button>
-          </Route>
-          <Route path="/user">
-            <div class="container">
-              <input type="date" id="day" />
-              <select id="meal">
-                <option value="none">Select Meal</option>
-                <option value="breakfast">Breakfast</option>
-                <option value="lunch">Lunch</option>
-                <option value="dinner">Dinner</option>
-              </select>
-              <Route path="/calories">
-                <button id="save" onClick={this.save}>
-                  Save
-                </button>
-              </Route>
+            </Route>
+            <tr className={styles.total} id="total">
+              <th>Total</th>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <Route exact path="/calories">
+          <button type="button" className={styles.row} onClick={this.addRow}>
+            Add row
+          </button>
+          <button type="button" className={styles.row} onClick={this.deleteRow}>
+            Delete Row
+          </button>
+          <button type="button" className={styles.search} onClick={this.search}>
+            Search Info
+          </button>
+        </Route>
+        <Route path="/user">
+          <div class="container">
+            <input type="date" id="day" />
+            <select id="meal">
+              <option value="none">Select Meal</option>
+              <option value="breakfast">Breakfast</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
+            </select>
+            <Route exact path="/user/calories">
+              <button id="save" onClick={this.save}>
+                Save
+              </button>
+            </Route>
 
-              <Route>
-                <button onClick={this.getData} id="find">
-                  Find Data
-                </button>
-              </Route>
-            </div>
-          </Route>
-        </div>
-      </Router>
+            <Route exact path="/user/history">
+              <button onClick={this.getData} id="find">
+                Find Data
+              </button>
+            </Route>
+          </div>
+        </Route>
+      </div>
     );
   }
 }

@@ -4,18 +4,16 @@ const emailValidator = require("email-validator");
 module.exports.index = function (req, res) {
   //res.render("signup", { message: "none" });
 };
-/*
+
 module.exports.check_preexist_user = async function (req, res, next) {
   const preexist = await UserModel.findOne({ email: req.body.email });
 
   if (preexist) {
-    return res.render("signup", {
-      message: "User with the email already exists.",
-    });
+    return res.send("User with the email already exists.");
   }
   next();
 };
-*/
+
 module.exports.signup = async function (req, res) {
   // if email doesn't preexist, create and save user in database
   try {

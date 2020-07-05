@@ -3,9 +3,14 @@ module.exports.index = function (req, res) {
   if (!req.user) {
     //req.flash("message", "Login to access this page");
     //res.redirect("/");
-    res.send("fail");
+    console.log(" at home null");
+    res.send(null);
   } else {
     //res.render("home");
-    res.send("success");
+    let user = {
+      username: req.user.email
+    };
+    console.log("at home", req.user.email);
+    res.send(user);
   }
 };

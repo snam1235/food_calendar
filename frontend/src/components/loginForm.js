@@ -4,6 +4,7 @@ import styles from "../css/web.module.css";
 import cx from "classnames";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 class LoginForm extends Component {
   constructor() {
@@ -24,24 +25,29 @@ class LoginForm extends Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    console.log("handleSubmit");
-    console.log(this.state.username);
-    console.log(this.state.password);
+    console.log("handle submit");
     axios
       .post("/login", {
         username: this.state.username,
         password: this.state.password
       })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.data.username) {
           // update App.js state
           this.props.updateUser({
             loggedIn: true,
             username: response.data.username
           });
           // update the state to redirect to home
+
           this.setState({
             redirectTo: "/user"
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: response.data
           });
         }
       })
@@ -52,6 +58,7 @@ class LoginForm extends Component {
   }
   render() {
     if (this.state.redirectTo) {
+      console.log("redirect called");
       return <Redirect to={this.state.redirectTo} />;
     } else {
       return (
