@@ -7,14 +7,20 @@ import LoginForm from "../src/components/loginForm";
 import axios from "axios";
 import NavBar from "../src/components/navBar";
 import Signup from "../src/components/signup";
+import Calendar from "../src/components/calendar";
 import Swal from "sweetalert2";
 
+const style = {
+  position: "relative",
+  margin: "50px auto"
+};
 class App extends Component {
   constructor() {
     super();
     this.state = {
       loggedIn: null,
-      username: null
+      username: null,
+      fromLogout: null
     };
     this.getUser = this.getUser.bind(this);
     this.updateUser = this.updateUser.bind(this);
@@ -30,23 +36,36 @@ class App extends Component {
   }
 
   getUser() {
-    axios.get("/home").then((response) => {
+    axios.get("/check_user").then((response) => {
       console.log("get user", response.data);
       if (response.data.username) {
         this.setState({
           loggedIn: true,
-          username: response.data.username
+          username: response.data.username,
+          fromLogout: null
         });
       } else {
         this.setState({
           loggedIn: false,
-          username: null
+          username: null,
+          fromLogout: null
         });
       }
     });
   }
 
   render() {
+    const setState1 = {
+      name: "",
+      mass: "",
+      unit: "",
+      carbs: "",
+      fat: "",
+      protein: "",
+      calories: ""
+    };
+    const setState2 = null;
+
     if (this.state.loggedIn == null) {
       return null;
     } else {
@@ -57,7 +76,7 @@ class App extends Component {
             render={() => {
               console.log("user");
               console.log(this.state.loggedIn);
-              if (this.state.loggedIn)
+              if (this.state.loggedIn === true)
                 return (
                   <NavBar
                     updateUser={this.updateUser}
@@ -66,15 +85,24 @@ class App extends Component {
                 );
               else {
                 console.log("redirecting", this.state.loggedIn);
-
-                return (
-                  <Redirect
-                    to={{
-                      pathname: "/",
-                      state: { message: "Log In to Access this page" }
-                    }}
-                  ></Redirect>
-                );
+                if (this.state.fromLogout === true) {
+                  return (
+                    <Redirect
+                      to={{
+                        pathname: "/"
+                      }}
+                    ></Redirect>
+                  );
+                } else {
+                  return (
+                    <Redirect
+                      to={{
+                        pathname: "/",
+                        state: { message: "Log In to Access this page" }
+                      }}
+                    ></Redirect>
+                  );
+                }
               }
             }}
           ></Route>
@@ -104,6 +132,10 @@ class App extends Component {
                   }
                   props.location.state = null;
                 }
+
+                if (this.state.loggedIn === true) {
+                  return <Redirect to="/user"></Redirect>;
+                }
                 return (
                   <>
                     <NavBar
@@ -119,31 +151,59 @@ class App extends Component {
             <Route
               exact
               path="/calories"
-              render={() => (
-                <>
-                  <NavBar
-                    updateUser={this.updateUser}
-                    loggedIn={this.state.loggedIn}
-                  ></NavBar>
-                  <Table></Table>
-                </>
-              )}
+              render={() => {
+                if (this.state.loggedIn === true) {
+                  return <Redirect to="/user/calories"></Redirect>;
+                }
+                return (
+                  <>
+                    <NavBar
+                      updateUser={this.updateUser}
+                      loggedIn={this.state.loggedIn}
+                    ></NavBar>
+                    <Table initialTableState={"oneRow"}></Table>
+                  </>
+                );
+              }}
             ></Route>
 
             <Route
               exact
               path="/user/calories"
               render={() => {
-                return <Table></Table>;
+                return <Table initialTableState={"oneRow"}></Table>;
               }}
             ></Route>
 
             <Route
               exact
               path="/user/history"
-              render={() => <Table></Table>}
+              render={() => <Table initialTableState={"empty"}></Table>}
             ></Route>
-            <Route exact path="/signup" render={() => <Signup />}></Route>
+            <Route
+              exact
+              path="/signup"
+              render={() => {
+                if (this.state.loggedIn === true) {
+                  return <Redirect to="/user"></Redirect>;
+                }
+
+                return <Signup />;
+              }}
+            ></Route>
+            <Route
+              exact
+              path="/calendar"
+              render={() => {
+                return (
+                  <Calendar
+                    style={style}
+                    width="2000px"
+                    onDayClick={(e, day) => this.onDayClick(e, day)}
+                  ></Calendar>
+                );
+              }}
+            ></Route>
           </Switch>
         </>
       );

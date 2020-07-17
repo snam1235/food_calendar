@@ -20,7 +20,8 @@ class NavBar extends Component {
       .then((response) => {
         this.props.updateUser({
           loggedIn: false,
-          username: null
+          username: null,
+          fromLogout: true
         });
       })
       .catch((error) => {

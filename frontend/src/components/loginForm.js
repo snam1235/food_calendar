@@ -36,7 +36,8 @@ class LoginForm extends Component {
           // update App.js state
           this.props.updateUser({
             loggedIn: true,
-            username: response.data.username
+            username: response.data.username,
+            fromLogout: null
           });
           // update the state to redirect to home
 
@@ -57,8 +58,8 @@ class LoginForm extends Component {
       });
   }
   render() {
+    console.log("rendered");
     if (this.state.redirectTo) {
-      console.log("redirect called");
       return <Redirect to={this.state.redirectTo} />;
     } else {
       return (

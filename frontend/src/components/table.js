@@ -1,98 +1,112 @@
 import React, { Component } from "react";
 import styles from "../css/calories.module.css";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 
 class Table extends Component {
-  constructor() {
-    super();
-    this.addRow = this.addRow.bind(this);
-    this.deleteRow = this.deleteRow.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      rows: []
+    };
+
     this.search = this.search.bind(this);
     this.save = this.save.bind(this);
     this.addInfoRow = this.addInfoRow.bind(this);
     this.getData = this.getData.bind(this);
   }
-
   componentDidMount() {
-    let i;
-
-    for (i = 0; i < 2; i++) {
-      document
-        .getElementsByTagName("td")
-        [i].setAttribute("contenteditable", "true");
+    console.log("thisisisis");
+    if (this.props.initialTableState === "oneRow") {
+      this.setState({
+        rows: [
+          {
+            name: "",
+            mass: "",
+            unit: "",
+            carbs: "",
+            fat: "",
+            protein: "",
+            calories: ""
+          }
+        ]
+      });
     }
   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.initialTableState !== this.props.initialTableState) {
+      let lastRow = document.getElementById("total");
+      lastRow.cells[3].innerHTML = "";
+      lastRow.cells[4].innerHTML = "";
+      lastRow.cells[5].innerHTML = "";
+      lastRow.cells[6].innerHTML = "";
 
-  addRow(event) {
-    let table = document.getElementById("myTable");
-    let len = table.rows.length;
+      if (this.props.initialTableState === "oneRow") {
+        console.log(prevProps.initialTableState);
 
-    let lastRow = table.insertRow(len - 1);
-
-    var element = lastRow.insertCell(0);
-    element.setAttribute("name", "name");
-
-    element = lastRow.insertCell(1);
-    element.setAttribute("name", "mass");
-
-    element = lastRow.insertCell(2);
-    var select = document.createElement("select");
-    select.setAttribute("name", "unit");
-
-    var units = [
-      "Gram",
-      "Kilogram",
-      "Ounce",
-      "Pinch",
-      "Liter",
-      "Fluid Ounce",
-      "Gallon",
-      "Pint",
-      "Milliliter",
-      "Cup",
-      "Tablespoon",
-      "Teaspoon"
-    ];
-
-    for (let i = 0; i < units.length; i++) {
-      var option = document.createElement("option");
-
-      option.value = units[i].toLowerCase();
-      option.text = units[i];
-      select.appendChild(option);
-    }
-
-    element.appendChild(select);
-
-    element = lastRow.insertCell(3);
-    element.setAttribute("name", "carb");
-
-    element = lastRow.insertCell(4);
-    element.setAttribute("name", "fat");
-
-    element = lastRow.insertCell(5);
-    element.setAttribute("name", "protein");
-
-    element = lastRow.insertCell(6);
-    element.setAttribute("name", "calories");
-
-    let i;
-
-    for (i = 2; i < table.rows.length - 1; i++) {
-      for (let j = 0; j < 2; j++) {
-        table.rows[i].cells[j].setAttribute("contenteditable", "true");
+        this.setState({
+          rows: [
+            {
+              name: "",
+              mass: "",
+              unit: "",
+              carbs: "",
+              fat: "",
+              protein: "",
+              calories: ""
+            }
+          ]
+        });
+      } else {
+        this.setState({
+          rows: []
+        });
       }
     }
   }
+  unitSelect = () => {
+    return (
+      <select name="unit">
+        <option value="gram">Gram</option>
+        <option value="kilogram">Kilogram</option>
+        <option value="ounce">Ounce</option>
+        <option value="pinch">Pinch</option>
+        <option value="liter">Liter</option>
+        <option value="fluid_ounce">Fluid Ounce</option>
+        <option value="gallon">Gallon</option>
+        <option value="pint">Pint</option>
+        <option value="milliliter">Milliliter</option>
+        <option value="cup">Cup</option>
+        <option value="tablespoon">Tablespoon</option>
+        <option value="teaspoon">Teaspoon</option>
+      </select>
+    );
+  };
 
-  deleteRow(event) {
-    let table = document.getElementById("myTable");
-    let len = table.rows.length;
-
-    if (len >= 4) document.getElementById("myTable").deleteRow(len - 1);
-  }
+  addRow = () => {
+    let newRow = {
+      name: "",
+      mass: "",
+      unit: "",
+      carbs: "",
+      fat: "",
+      protein: "",
+      calories: ""
+    };
+    let currentRows = this.state.rows;
+    currentRows.push(newRow);
+    this.setState({
+      rows: currentRows
+    });
+  };
+  deleteRow = () => {
+    if (this.state.rows.length > 1) {
+      let currentRows = this.state.rows;
+      currentRows.pop();
+      this.setState({ rows: currentRows });
+    }
+  };
 
   search(event) {
     let foods = [];
@@ -253,17 +267,17 @@ class Table extends Component {
       });
   }
   addInfoRow(infos) {
-    let table = document.getElementById("myTable");
-    let len = table.rows.length;
-    var row = table.insertRow(len - 1);
-
-    row.insertCell(0).innerHTML = infos.name;
-    row.insertCell(1).innerHTML = infos.mass;
-    row.insertCell(2).innerHTML = infos.unit;
-    row.insertCell(3).innerHTML = infos.carb;
-    row.insertCell(4).innerHTML = infos.fat;
-    row.insertCell(5).innerHTML = infos.protein;
-    row.insertCell(6).innerHTML = infos.calories;
+    let currentRows = this.state.rows;
+    let newRow = {
+      name: infos.name,
+      mass: infos.mass,
+      unit: infos.unit,
+      carb: infos.carb,
+      fat: infos.fat,
+      protein: infos.protein,
+      calories: infos.calories
+    };
+    currentRows.push(newRow);
   }
   async getData() {
     //gets user input
@@ -287,7 +301,7 @@ class Table extends Component {
       })
       .then((data) => {
         // if response is failure show alert message to client
-        console.log(data);
+
         if (data == null) {
           Swal.fire({
             icon: "error",
@@ -295,9 +309,6 @@ class Table extends Component {
             text: "Failed for unknown reason"
           });
         } else if (data.message === "fail") {
-          alert(
-            "No entries for the selected date and time, please enter another date and time"
-          );
           Swal.fire({
             icon: "error",
             title: "Error",
@@ -335,69 +346,87 @@ class Table extends Component {
     return (
       <div class="container">
         <Route exact path="/user/calories">
-          <button type="button" className={styles.row} onClick={this.addRow}>
+          <button
+            type="button"
+            className={styles.rowButton}
+            onClick={this.addRow}
+          >
             Add row
           </button>
-          <button type="button" className={styles.row} onClick={this.deleteRow}>
+          <button
+            type="button"
+            className={styles.rowButton}
+            onClick={this.deleteRow}
+          >
             Delete Row
           </button>
           <button type="button" className={styles.search} onClick={this.search}>
             Search Nutrition Facts
           </button>
         </Route>
-        <table id="myTable">
+        <table id="myTable" className={styles.table}>
           <tbody>
             <tr>
-              <th>Food Name</th>
-              <th>Mass/Quantity</th>
-              <th>Unit</th>
-              <th>Carbs</th>
-              <th>Fat</th>
-              <th>Protein</th>
-              <th>K Calories</th>
+              <th className={styles.th}>Food Name</th>
+              <th className={styles.th}>Mass/Quantity</th>
+              <th className={styles.th}>Unit</th>
+              <th className={styles.th}>Carbs</th>
+              <th className={styles.th}>Fat</th>
+              <th className={styles.th}>Protein</th>
+              <th className={styles.th}>K Calories</th>
             </tr>
-            <Route path="/calories">
-              <tr>
-                <td></td>
-                <td></td>
-                <td>
-                  <select name="unit">
-                    <option value="gram">Gram</option>
-                    <option value="kilogram">Kilogram</option>
-                    <option value="ounce">Ounce</option>
-                    <option value="pinch">Pinch</option>
-                    <option value="liter">Liter</option>
-                    <option value="fluid_ounce">Fluid Ounce</option>
-                    <option value="gallon">Gallon</option>
-                    <option value="pint">Pint</option>
-                    <option value="milliliter">Milliliter</option>
-                    <option value="cup">Cup</option>
-                    <option value="tablespoon">Tablespoon</option>
-                    <option value="teaspoon">Teaspoon</option>
-                  </select>
+
+            {this.state.rows.map((row, index) => (
+              <tr key={index} className={styles.caloriesRow}>
+                <td className={styles.td} name="name" contentEditable="true">
+                  {row.name}
                 </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td className={styles.td} name="mass" contentEditable="true">
+                  {row.mass}
+                </td>
+                <td className={styles.td} name="unit">
+                  <this.unitSelect />
+                </td>
+                <td className={styles.td} name="carb">
+                  {row.carbs}
+                </td>
+                <td className={styles.td} name="fat">
+                  {row.fat}
+                </td>
+                <td className={styles.td} name="protein">
+                  {row.protein}
+                </td>
+                <td className={styles.td} name="calories">
+                  {row.calories}
+                </td>
               </tr>
-            </Route>
+            ))}
+
             <tr className={styles.total} id="total">
-              <th>Total</th>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <th className={styles.th}>Total</th>
+              <td className={styles.td}></td>
+              <td className={styles.td}></td>
+              <td className={styles.td}></td>
+              <td className={styles.td}></td>
+              <td className={styles.td}></td>
+              <td className={styles.td}></td>
             </tr>
           </tbody>
         </table>
+
         <Route exact path="/calories">
-          <button type="button" className={styles.row} onClick={this.addRow}>
+          <button
+            type="button"
+            className={styles.rowButton}
+            onClick={this.addRow}
+          >
             Add row
           </button>
-          <button type="button" className={styles.row} onClick={this.deleteRow}>
+          <button
+            type="button"
+            className={styles.rowButton}
+            onClick={this.deleteRow}
+          >
             Delete Row
           </button>
           <button type="button" className={styles.search} onClick={this.search}>
