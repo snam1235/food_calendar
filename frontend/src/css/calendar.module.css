@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+.calendar-container,
+.calendar,
+.calendar-header,
+td,
+tr {
+  font-family: "Roboto", sans-serif;
+  color:white;
+}
+.container {
+ 
+  background-color: white;
+  height: 100%;
+  overflow-x: hidden;
+ 
+}
+.calendar_container {
+  border-radius: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  overflow-y: hidden
+}
+
+.calendar {
+  z-index: 1;
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 300%;
+  background-color: #faaca8;
+  background-image: linear-gradient(19deg, #faaca8 0%, #ddd6f3 100%);
+}
+
+.calendar_header {
+  border-bottom: 4px dashed skyblue;
+  font-size: 7.0rem;
+}
+
+.calendar_header td {
+  border-spacing: 0;
+  padding-left: 5px;
+}
+
+.day,
+.empty_slot,
+.week_day {
+  text-align: center;
+  height: 100px;
+  
+}
+
+.week_day {
+  font-size: 2.0em;
+}
+
+.day {
+  font-size: 2.5em;
+}
+
+.day {
+  cursor: pointer;
+  width: 28px;
+  height: 150px;
+  line-height: 24px;
+}
+
+.current_day {
+  width: 28px;
+  height: 150px;
+  line-height: 24px;
+  border-style: solid;
+  border-radius: 2%;
+  border-width: 4px;
+  border-color: black;
+  color: black;
+}
+.selected_day {
+  width: 28px;
+  height: 150px;
+  line-height: 28px;
+  border-style: solid;
+  border-width: 4px;
+  border-color: white;
+  border-radius: 2%;
+  color: black;
+}
+
+.month_popup {
+  position: absolute;
+  padding: 5px;
+  background: white;
+  border: 2px solid skyblue;
+  overflow-y: scroll;
+  height: 20rem;
+}
+
+.month_popup div {
+  padding: 0.3em;
+}
+
+.nav_month {
+  position: absolute;
+  top: 0.6em;
+  font-size: 0.6em;
+  right: 3px;
+}
+
+
+
+
+.editor_year {
+  width: 7rem;
+  font-size: 2.5rem;
+  height:4rem;
+  background-color: lightgray;
+}
+
+.label_month,
+.label_year {
+  font-size: 0.6em;
+}
+
+.label_month {
+  cursor: pointer;
+}
+
+.button {
+  border-radius: 12px;
+  background-color: #faaca8;
+  background-image: linear-gradient(19deg, #faaca8 0%, #ddd6f3 100%);
+  color:white;
+  font-size:1.0rem;
+  border-color: white;
+}
+

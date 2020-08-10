@@ -32,8 +32,11 @@ class LoginForm extends Component {
         password: this.state.password
       })
       .then((response) => {
+        console.log(this.state.username);
+        console.log(response.data.username);
         if (response.data.username) {
           // update App.js state
+
           this.props.updateUser({
             loggedIn: true,
             username: response.data.username,
@@ -63,43 +66,46 @@ class LoginForm extends Component {
       return <Redirect to={this.state.redirectTo} />;
     } else {
       return (
-        <form>
-          <div className={cx(styles.container, styles.login)}>
-            <AccountCircleIcon style={{ fontSize: 100 }} />
-            <label className={styles.label}>Email</label>
-            <input
-              type="email"
-              name="username"
-              className={styles.input}
-              value={this.state.username}
-              onChange={this.handleChange}
-            />
-            <label className={styles.label}>Password</label>
-            <input
-              type="password"
-              name="password"
-              height="20"
-              className={styles.input}
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
+        <div className={styles.full}>
+          <h1 className={styles.heading}>Food Calendar</h1>
+          <form>
+            <div className={cx(styles.container, styles.login)}>
+              <AccountCircleIcon style={{ fontSize: 100 }} />
+              <label className={styles.label}>Email</label>
+              <input
+                type="email"
+                name="username"
+                className={styles.input}
+                value={this.state.username}
+                onChange={this.handleChange}
+              />
+              <label className={styles.label}>Password</label>
+              <input
+                type="password"
+                name="password"
+                height="20"
+                className={styles.input}
+                value={this.state.password}
+                onChange={this.handleChange}
+              />
 
-            <button
-              type="submit"
-              className={styles.button}
-              onClick={this.handleSubmit}
-              id="btn1"
-            >
-              Sign In
-            </button>
-
-            <a href="/signup" className={styles.signup}>
-              <button className={styles.button} type="button">
-                Sign up
+              <button
+                type="submit"
+                className={styles.button}
+                onClick={this.handleSubmit}
+                id="btn1"
+              >
+                Sign In
               </button>
-            </a>
-          </div>
-        </form>
+
+              <a href="/signup" className={styles.signup}>
+                <button className={styles.button} type="button">
+                  Sign up
+                </button>
+              </a>
+            </div>
+          </form>
+        </div>
       );
     }
   }

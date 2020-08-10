@@ -10,10 +10,6 @@ import Signup from "../src/components/signup";
 import Calendar from "../src/components/calendar";
 import Swal from "sweetalert2";
 
-const style = {
-  position: "relative",
-  margin: "50px auto"
-};
 class App extends Component {
   constructor() {
     super();
@@ -37,7 +33,9 @@ class App extends Component {
 
   getUser() {
     axios.get("/check_user").then((response) => {
+      console.log("hi");
       console.log("get user", response.data);
+
       if (response.data.username) {
         this.setState({
           loggedIn: true,
@@ -134,8 +132,9 @@ class App extends Component {
                 }
 
                 if (this.state.loggedIn === true) {
-                  return <Redirect to="/user"></Redirect>;
+                  return <Redirect to="/calendar"></Redirect>;
                 }
+                console.log(this.state.loggedIn);
                 return (
                   <>
                     <NavBar
@@ -150,42 +149,10 @@ class App extends Component {
 
             <Route
               exact
-              path="/calories"
-              render={() => {
-                if (this.state.loggedIn === true) {
-                  return <Redirect to="/user/calories"></Redirect>;
-                }
-                return (
-                  <>
-                    <NavBar
-                      updateUser={this.updateUser}
-                      loggedIn={this.state.loggedIn}
-                    ></NavBar>
-                    <Table initialTableState={"oneRow"}></Table>
-                  </>
-                );
-              }}
-            ></Route>
-
-            <Route
-              exact
-              path="/user/calories"
-              render={() => {
-                return <Table initialTableState={"oneRow"}></Table>;
-              }}
-            ></Route>
-
-            <Route
-              exact
-              path="/user/history"
-              render={() => <Table initialTableState={"empty"}></Table>}
-            ></Route>
-            <Route
-              exact
               path="/signup"
               render={() => {
                 if (this.state.loggedIn === true) {
-                  return <Redirect to="/user"></Redirect>;
+                  return <Redirect to="/calendar"></Redirect>;
                 }
 
                 return <Signup />;
@@ -195,13 +162,38 @@ class App extends Component {
               exact
               path="/calendar"
               render={() => {
-                return (
-                  <Calendar
-                    style={style}
-                    width="2000px"
-                    onDayClick={(e, day) => this.onDayClick(e, day)}
-                  ></Calendar>
-                );
+                if (this.state.loggedIn === true) {
+                  return (
+                    <>
+                      <Calendar
+                        updateUser={this.updateUser}
+                        loggedIn={this.state.loggedIn}
+                        width="2000px"
+                        onDayClick={(e, day) => this.onDayClick(e, day)}
+                      ></Calendar>
+                    </>
+                  );
+                } else {
+                  console.log("redirecting", this.state.loggedIn);
+                  if (this.state.fromLogout === true) {
+                    return (
+                      <Redirect
+                        to={{
+                          pathname: "/"
+                        }}
+                      ></Redirect>
+                    );
+                  } else {
+                    return (
+                      <Redirect
+                        to={{
+                          pathname: "/",
+                          state: { message: "Log In to Access this page" }
+                        }}
+                      ></Redirect>
+                    );
+                  }
+                }
               }}
             ></Route>
           </Switch>

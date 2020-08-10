@@ -1,19 +1,25 @@
-body {
-  font-family: "IBM Plex Serif", "serif";
-  font-size: 40px;
-  height: 100%;
-  background-image: url("/images/food.jpg");
-  background-position: center;
-  background-repeat: repeat-y;
-  background-size: cover;
-}
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  z-index:999;
+  font-family: "Roboto", sans-serif;
+  font-size: 40px;
+  height: "calc(100vh - 100px)";
+  position: absolute;
+  top: 10%;
+  left: 25%;
+  z-index: 1;
+  cursor: move;
+  
 }
-
+.container2 {
+ 
+  background: linear-gradient(to right, #25c481, #25b7c4);
+  position: absolute;
+  border-radius: 35px;
+  overflow-y:scroll;
+  height: 40rem;
+}
 .cal {
   text-decoration: none;
   color: white;
@@ -32,12 +38,16 @@ body {
 .table,
 .th,
 .td {
-  border: 2px solid black;
+  padding:30px;
+  color:white;
+  border: 1px solid rgba(255,255,255,0.3);
 }
-
+.th{
+  font-size:30px;
+}
 .table {
   width: 80%;
-  background-color: #f2f2f2;
+  background: linear-gradient(to right, #25c481, #25b7c4);
 }
 
 .th,
@@ -45,17 +55,21 @@ body {
   height: 50px;
   width: 100px;
 }
-
+.td{
+  width:20rem;
+}
 .total {
   border: 2px solid black;
   color: black;
 }
 
-select {
-  width: 100%;
+.select {
+  font-family: "Roboto", sans-serif;
+  border-radius: 10px;
   height: 50px;
   text-align: center;
   overflow: hidden;
+  
 }
 
 [type="date"] {
@@ -80,43 +94,71 @@ input {
   height: 40px;
 }
 
-.rowButton {
-  font-size: 20px;
-  transition-duration: 0.4s;
-  border: 2px solid black;
-}
+
 .search {
   font-size: 20px;
   transition-duration: 0.4s;
-  border: 2px solid black;
-}
-.row:hover {
-  background-color: orange;
-  color: white;
-}
-.search:hover {
-  background-color: orange;
-  color: white;
-}
-.save {
-  top: 435px;
-  right: 200px;
-  font-size: 30px;
-  transition-duration: 0.4s;
-  width: 100px;
-  border: 2px solid orange;
+  border: 3px solid rgba(255,255,255,1);
+  color:white;
+  border-radius:10px;
+  background: linear-gradient(to right, #25c481, #25b7c4);
 }
 
-.save:hover {
-  background-color: orange; /* Green */
-  color: white;
-}
-.find {
+.button{
   font-size: 20px;
   transition-duration: 0.4s;
-  width: 100px;
-  border: 2px solid orange;
+  border: 3px solid rgba(255,255,255,1);
+  color:white;
+  border-radius:10px;
+  background: linear-gradient(to right, #25c481, #25b7c4);
+  
 }
+
+.button:hover {
+  
+  color: black
+}
+
+@keyframes glowing {
+  0% {
+    background-color:#f79328; ;
+    border-color: #f79328;
+    box-shadow: 0 0 20px #f79328;
+    color:black;
+  }
+  50% {
+    background-color: #f79328; ;
+    border-color: #f79328;
+    box-shadow: 0 0 60px #f79328;
+  }
+  100% {
+    background-color:#f79328;  
+    border-color: #f79328;
+    box-shadow: 0 0 150px #f79328;
+  }
+}
+@-webkit-keyframes glowing {
+  0% {
+    background-color:#f79328; ;
+    border-color: #f79328;
+    box-shadow: 0 0 20px #f79328;
+  }
+  50% {
+    background-color: #f79328; ;
+    border-color: #f79328;
+    box-shadow: 0 0 60px #f79328;
+  }
+  100% {
+    background-color:#f79328;  
+    border-color: #f79328;
+    box-shadow: 0 0 150px #f79328;
+  }
+}
+.highlight{
+  
+  animation: glowing 1300ms infinite;
+}
+
 
 .signup {
   transition-duration: 0.4s;
@@ -143,3 +185,4 @@ input {
 #logout {
   color: black;
 }
+

@@ -3,13 +3,17 @@ import styles from "../css/calories.module.css";
 import { Route } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
-
+import Draggable from "react-draggable";
+import cx from "classnames";
 class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rows: []
+      rows: [[]],
+      date: null,
+      save: false
     };
+    this.saveRef = React.createRef();
 
     this.search = this.search.bind(this);
     this.save = this.save.bind(this);
@@ -17,57 +21,12 @@ class Table extends Component {
     this.getData = this.getData.bind(this);
   }
   componentDidMount() {
-    console.log("thisisisis");
-    if (this.props.initialTableState === "oneRow") {
-      this.setState({
-        rows: [
-          {
-            name: "",
-            mass: "",
-            unit: "",
-            carbs: "",
-            fat: "",
-            protein: "",
-            calories: ""
-          }
-        ]
-      });
-    }
+    this.getData();
   }
-  componentDidUpdate(prevProps) {
-    if (prevProps.initialTableState !== this.props.initialTableState) {
-      let lastRow = document.getElementById("total");
-      lastRow.cells[3].innerHTML = "";
-      lastRow.cells[4].innerHTML = "";
-      lastRow.cells[5].innerHTML = "";
-      lastRow.cells[6].innerHTML = "";
 
-      if (this.props.initialTableState === "oneRow") {
-        console.log(prevProps.initialTableState);
-
-        this.setState({
-          rows: [
-            {
-              name: "",
-              mass: "",
-              unit: "",
-              carbs: "",
-              fat: "",
-              protein: "",
-              calories: ""
-            }
-          ]
-        });
-      } else {
-        this.setState({
-          rows: []
-        });
-      }
-    }
-  }
   unitSelect = () => {
     return (
-      <select name="unit">
+      <select className={styles.select} name="unit">
         <option value="gram">Gram</option>
         <option value="kilogram">Kilogram</option>
         <option value="ounce">Ounce</option>
@@ -204,6 +163,8 @@ class Table extends Component {
       lastRow.cells[5].innerHTML = totalPro.toFixed(2) + "g";
       lastRow.cells[6].innerHTML = totalCal.toFixed(2) + "kcal";
     });
+
+    this.setState({ save: !this.state.save });
   }
 
   save() {
@@ -215,8 +176,8 @@ class Table extends Component {
       fat: [],
       protein: [],
       calories: [],
-      day: document.getElementById("day").value.toString(),
-      meal: document.getElementById("meal").value.toString()
+      day: this.props.date,
+      meal: this.props.meal
     };
 
     let len = document.getElementsByName("name").length;
@@ -239,7 +200,7 @@ class Table extends Component {
       param.protein.push(proteins[i].innerHTML);
       param.calories.push(calories[i].innerHTML);
     }
-
+    console.log(param);
     const options = {
       method: "post",
       data: JSON.stringify(param),
@@ -265,6 +226,7 @@ class Table extends Component {
           Swal.fire({ icon: "success", title: "Saved!" });
         }
       });
+    this.setState({ save: !this.state.save });
   }
   addInfoRow(infos) {
     let currentRows = this.state.rows;
@@ -277,13 +239,18 @@ class Table extends Component {
       protein: infos.protein,
       calories: infos.calories
     };
+
     currentRows.push(newRow);
+
+    console.log(newRow);
+    console.log(currentRows);
+    this.setState({ rows: currentRows });
   }
   async getData() {
     //gets user input
     let param = {
-      Meal: document.getElementById("meal").value.toString(),
-      Date: document.getElementById("day").value.toString()
+      Meal: this.props.meal,
+      Date: this.props.date
     };
 
     const options = {
@@ -308,27 +275,29 @@ class Table extends Component {
             title: "Error",
             text: "Failed for unknown reason"
           });
-        } else if (data.message === "fail") {
+        } else if (data.message === "fail" || data.message.length === 0) {
           Swal.fire({
-            icon: "error",
-            title: "Error",
-            text:
-              "No entries for the selected date and time, please enter another date and time"
+            icon: "info",
+            title: "Info",
+            text: "No entries for the selected date and time"
           });
         } else {
           // if response is success, show user's food history data in table
-          if (document.getElementById("myTable").rows.length > 2) {
-            let i = 1;
+          console.log("message is");
+          console.log(data.message);
 
-            for (i; i < document.getElementById("myTable").rows.length; i++) {
-              document.getElementById("myTable").deleteRow(1);
-            }
-          }
+          let currentRows = this.state.rows;
+          currentRows.pop();
+          console.log("current Row is");
+          console.log(currentRows);
+          this.setState({ rows: currentRows });
 
           let mealCount = data.message.length;
           let i = 0;
 
           for (i; i < mealCount - 1; i++) {
+            console.log("first row");
+            console.log(data.message[i]);
             this.addInfoRow(data.message[i]);
           }
 
@@ -344,118 +313,112 @@ class Table extends Component {
   }
   render() {
     return (
-      <div class="container">
-        <Route exact path="/user/calories">
-          <button
-            type="button"
-            className={styles.rowButton}
-            onClick={this.addRow}
-          >
-            Add row
-          </button>
-          <button
-            type="button"
-            className={styles.rowButton}
-            onClick={this.deleteRow}
-          >
-            Delete Row
-          </button>
-          <button type="button" className={styles.search} onClick={this.search}>
-            Search Nutrition Facts
-          </button>
-        </Route>
-        <table id="myTable" className={styles.table}>
-          <tbody>
-            <tr>
-              <th className={styles.th}>Food Name</th>
-              <th className={styles.th}>Mass/Quantity</th>
-              <th className={styles.th}>Unit</th>
-              <th className={styles.th}>Carbs</th>
-              <th className={styles.th}>Fat</th>
-              <th className={styles.th}>Protein</th>
-              <th className={styles.th}>K Calories</th>
-            </tr>
+      <Draggable>
+        <div className={styles.container}>
+          <div className={styles.container2}>
+            <button
+              type="button"
+              className={styles.button}
+              onClick={this.addRow}
+            >
+              Add row
+            </button>
+            <button
+              type="button"
+              className={styles.button}
+              onClick={this.deleteRow}
+            >
+              Delete Row
+            </button>
+            <button
+              type="button"
+              className={styles.button}
+              onClick={this.search}
+            >
+              Search Nutrition Facts
+            </button>
 
-            {this.state.rows.map((row, index) => (
-              <tr key={index} className={styles.caloriesRow}>
-                <td className={styles.td} name="name" contentEditable="true">
-                  {row.name}
-                </td>
-                <td className={styles.td} name="mass" contentEditable="true">
-                  {row.mass}
-                </td>
-                <td className={styles.td} name="unit">
-                  <this.unitSelect />
-                </td>
-                <td className={styles.td} name="carb">
-                  {row.carbs}
-                </td>
-                <td className={styles.td} name="fat">
-                  {row.fat}
-                </td>
-                <td className={styles.td} name="protein">
-                  {row.protein}
-                </td>
-                <td className={styles.td} name="calories">
-                  {row.calories}
-                </td>
-              </tr>
-            ))}
+            <table id="myTable" className={styles.table}>
+              <tbody>
+                <tr>
+                  <th className={styles.th}>Food Name</th>
+                  <th className={styles.th}>Mass/Quantity</th>
+                  <th className={styles.th}>Unit</th>
+                  <th className={styles.th}>Carbs</th>
+                  <th className={styles.th}>Fat</th>
+                  <th className={styles.th}>Protein</th>
+                  <th className={styles.th}>K Calories</th>
+                </tr>
 
-            <tr className={styles.total} id="total">
-              <th className={styles.th}>Total</th>
-              <td className={styles.td}></td>
-              <td className={styles.td}></td>
-              <td className={styles.td}></td>
-              <td className={styles.td}></td>
-              <td className={styles.td}></td>
-              <td className={styles.td}></td>
-            </tr>
-          </tbody>
-        </table>
+                {this.state.rows.map((row, index) => (
+                  <tr key={index} className={styles.caloriesRow}>
+                    <td
+                      className={styles.td}
+                      name="name"
+                      contentEditable="true"
+                    >
+                      {row.name}
+                    </td>
+                    <td
+                      className={styles.td}
+                      name="mass"
+                      contentEditable="true"
+                    >
+                      {row.mass}
+                    </td>
+                    <td className={styles.td} name="unit">
+                      <this.unitSelect />
+                    </td>
+                    <td className={styles.td} name="carb">
+                      {row.carb}
+                    </td>
+                    <td className={styles.td} name="fat">
+                      {row.fat}
+                    </td>
+                    <td className={styles.td} name="protein">
+                      {row.protein}
+                    </td>
+                    <td className={styles.td} name="calories">
+                      {row.calories}
+                    </td>
+                  </tr>
+                ))}
 
-        <Route exact path="/calories">
-          <button
-            type="button"
-            className={styles.rowButton}
-            onClick={this.addRow}
-          >
-            Add row
-          </button>
-          <button
-            type="button"
-            className={styles.rowButton}
-            onClick={this.deleteRow}
-          >
-            Delete Row
-          </button>
-          <button type="button" className={styles.search} onClick={this.search}>
-            Search Info
-          </button>
-        </Route>
-        <Route path="/user">
-          <div class="container">
-            <input type="date" id="day" />
-            <select id="meal">
-              <option value="none">Select Meal</option>
-              <option value="breakfast">Breakfast</option>
-              <option value="lunch">Lunch</option>
-              <option value="dinner">Dinner</option>
-            </select>
-            <Route exact path="/user/calories">
-              <button id="save" onClick={this.save}>
+                <tr className={styles.total} id="total">
+                  <th className={styles.th} name="name">
+                    Total
+                  </th>
+                  <td className={styles.td} name="mass"></td>
+                  <td className={styles.td} name="unit"></td>
+                  <td className={styles.td} name="carb"></td>
+                  <td className={styles.td} name="fat"></td>
+                  <td className={styles.td} name="protein"></td>
+                  <td className={styles.td} name="calories"></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="container">
+              <button
+                id="save"
+                className={
+                  this.state.save
+                    ? cx(styles.button, styles.highlight)
+                    : cx(styles.button)
+                }
+                onClick={this.save}
+                ref={this.saveRef}
+              >
                 Save
               </button>
-            </Route>
 
-            <Route exact path="/user/history">
-              <button onClick={this.getData} id="find">
-                Find Data
+              <button onClick={this.props.close} className={styles.button}>
+                Close
               </button>
-            </Route>
+            </div>
           </div>
-        </Route>
-      </div>
+        </div>
+      </Draggable>
     );
   }
 }

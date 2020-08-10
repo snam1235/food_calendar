@@ -1,18 +1,9 @@
-* {
-  box-sizing: border-box;
-}
-html {
-  font-family: "IBM Plex Serif", "serif";
-  height: 100%;
-  background-image: url("/images/food.jpg");
-  background-position: center;
-  background-repeat: repeat-y;
-  background-size: cover;
-}
+
 /* Full-width input fields */
 .myForm {
   background-color: rgba(226, 220, 220, 0.637);
   border: 1px solid #ccc;
+  height:100%;
 }
 .email,
 .password {

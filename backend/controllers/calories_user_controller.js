@@ -12,7 +12,7 @@ module.exports.index = function (req, res) {
 };
 module.exports.save_food_model = async function (req, res, next) {
   let ids = new Array();
-  console.log("calories-suer");
+
   let day;
   // if user did not input a date
   if (req.body.day == "") {
@@ -75,7 +75,6 @@ module.exports.save_date_model = async function (req, res) {
                 .populate("dinner")
                 .exec(function (error, days) {
                   if (!error) {
-                    console.log(JSON.stringify(days, null, "\t"));
                     return res.json(days);
                   } else {
                     return res.json({ message: err });
@@ -102,7 +101,6 @@ module.exports.save_date_model = async function (req, res) {
                 .populate("dinner")
                 .exec(function (error, days) {
                   if (!error) {
-                    console.log(JSON.stringify(days, null, "\t"));
                     return res.json(days);
                   } else {
                     return res.json({ message: err });
@@ -129,7 +127,6 @@ module.exports.save_date_model = async function (req, res) {
                 .populate("dinner")
                 .exec(function (error, days) {
                   if (!error) {
-                    console.log(JSON.stringify(days, null, "\t"));
                     return res.json(days);
                   } else {
                     return res.json({ message: err });
@@ -154,7 +151,6 @@ module.exports.save_date_model = async function (req, res) {
             .populate("dinner")
             .exec(function (error, days) {
               if (!error) {
-                console.log(JSON.stringify(days, null, "\t"));
                 return res.json(days);
               } else {
                 return res.json({ message: err });
@@ -172,7 +168,6 @@ module.exports.save_date_model = async function (req, res) {
             .populate("dinner")
             .exec(function (error, days) {
               if (!error) {
-                console.log(JSON.stringify(days, null, "\t"));
                 return res.json(days);
               } else {
                 return res.json({ message: err });
@@ -190,7 +185,6 @@ module.exports.save_date_model = async function (req, res) {
             .populate("dinner")
             .exec(function (error, days) {
               if (!error) {
-                console.log(JSON.stringify(days, null, "\t"));
                 return res.json(days);
               } else {
                 return res.json({ message: err });

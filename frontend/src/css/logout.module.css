@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+  }
+  .nav_contain {
+    display: inline;
+    padding-right: 50px;
+  
+  }
+
+  .logoutLink{
+    text-decoration: none;
+    font-size:40px;
+  }
+    
