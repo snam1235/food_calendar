@@ -3,9 +3,9 @@ import moment from "moment";
 import styles from "../css/calendar.module.css";
 import Table from "./table";
 import axios from "axios";
-import { darken } from "@material-ui/core";
+
 import cx from "classnames";
-import NavBar from "./navBar";
+
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { Link } from "react-router-dom";
 
@@ -14,11 +14,12 @@ class Calendar extends Component {
     dateContext: moment(),
     today: moment(),
     showMonthPopup: false,
-    showYearPopup: false,
+    showYearNav: false,
     selectedDay: null,
     seen: false,
     route: null,
-    meal: null
+    meal: null,
+    arrowDisable: false
   };
 
   constructor(props) {
@@ -95,7 +96,9 @@ class Calendar extends Component {
 
   onSelectChange = (e, data) => {
     this.setMonth(data);
-    this.props.onMonthChange && this.props.onMonthChange();
+    this.setState({
+      showMonthPopup: false
+    });
   };
   SelectList = (props) => {
     let popup = props.data.map((data) => {
@@ -114,12 +117,23 @@ class Calendar extends Component {
       );
     });
 
-    return <div className={styles.month_popup}>{popup}</div>;
+    return (
+      <div
+        className={styles.month_popup}
+        onMouseLeave={(e) => {
+          this.setState({
+            showMonthPopup: false
+          });
+        }}
+      >
+        {popup}
+      </div>
+    );
   };
 
   onChangeMonth = (e, month) => {
     this.setState({
-      showMonthPopup: !this.state.showMonthPopup
+      showMonthPopup: true
     });
   };
 
@@ -128,7 +142,7 @@ class Calendar extends Component {
       <span
         id="month"
         className={styles.label_month}
-        onClick={(e) => {
+        onMouseOver={(e) => {
           this.onChangeMonth(e, this.month());
         }}
       >
@@ -140,7 +154,7 @@ class Calendar extends Component {
 
   showYearEditor = () => {
     this.setState({
-      showYearNav: true
+      showYearNav: !this.state.showYearNav
     });
   };
 
@@ -175,13 +189,16 @@ class Calendar extends Component {
         }}
         onKeyUp={(e) => this.onKeyUpYear(e)}
         onChange={(e) => this.onYearChange(e)}
+        onMouseLeave={(e) => {
+          this.showYearEditor();
+        }}
         type="number"
         placeholder="year"
       />
     ) : (
       <span
         className={styles.label_year}
-        onClick={(e) => {
+        onMouseEnter={(e) => {
           this.showYearEditor();
         }}
         className="year"
@@ -196,35 +213,35 @@ class Calendar extends Component {
     });
 
     const calendar = document.getElementById("calendar");
-    const buttons = document.getElementsByTagName("button");
     const cells = document.getElementsByTagName("td");
     const month = document.getElementById("month");
     const year = document.getElementsByClassName("year");
     const link = document.getElementsByTagName("a");
     const meals = document.getElementsByClassName("meal");
-    const monthButtons = document.getElementsByClassName("monthButton");
+    const header = document.getElementById("header");
+    this.setState({ darkArrow: !this.state.darkArrow });
+    /*
+    
+    la.style.borderTopColor = "white";
+    la.style.borderRightColor = "white";
+    ra.style.borderTopColor = "white";
+    ra.style.borderRightColor = "white";
+    */
+    header.style.borderColor = "skyblue";
     month.style.color = "white";
     year[0].style.color = "white";
     calendar.style.backgroundColor = "#faaca8";
     calendar.style.backgroundImage =
       "linear-gradient(19deg, #faaca8 0%, #ddd6f3 100%)";
 
-    for (let i = 0; i < buttons.length; i++) {
-      buttons[i].style.color = "white";
-      buttons[i].style.backgroundColor = "#faaca8";
-      buttons[i].style.backgroundImage =
-        "linear-gradient(19deg, #faaca8 0%, #ddd6f3 100%)";
-      buttons[i].style.borderColor = "white";
-    }
     for (let i = 0; i < cells.length; i++) {
       cells[i].style.color = "white";
     }
     for (let i = 0; i < meals.length; i++) {
       meals[i].disabled = false;
     }
-    monthButtons[0].disabled = false;
-    monthButtons[1].disabled = false;
-    link[0].style.color = "white";
+
+    link[2].style.color = "white";
   };
 
   onDayClick = (e, day) => {
@@ -258,32 +275,28 @@ class Calendar extends Component {
     });
 
     const calendar = document.getElementById("calendar");
-    const buttons = document.getElementsByTagName("button");
     const cells = document.getElementsByTagName("td");
     const month = document.getElementById("month");
     const year = document.getElementsByClassName("year");
     const link = document.getElementsByTagName("a");
     const meals = document.getElementsByClassName("meal");
-    const monthButtons = document.getElementsByClassName("monthButton");
+    const header = document.getElementById("header");
+
+    this.setState({ darkArrow: !this.state.darkArrow });
+    header.style.borderColor = "rgba(0,0,0, 0.9)";
     month.style.color = "rgba(0,0,0, 0.5)";
     year[0].style.color = "rgba(0,0,0, 0.5)";
-    calendar.style.backgroundColor = "rgba(0,0,0, 0.5)";
+    calendar.style.backgroundColor = "rgba(0,0,0, 0.9)";
     calendar.style.backgroundImage = "none";
-    for (let i = 0; i < buttons.length; i++) {
-      buttons[i].style.color = "rgba(0,0,0, 0.5)";
-      buttons[i].style.backgroundColor = "rgba(0,0,0, 0.5)";
-      buttons[i].style.backgroundImage = "none";
-      buttons[i].style.borderColor = "rgba(0,0,0, 0.5)";
-    }
+
     for (let i = 0; i < cells.length; i++) {
       cells[i].style.color = "rgba(0,0,0, 0.5)";
     }
     for (let i = 0; i < meals.length; i++) {
       meals[i].disabled = true;
     }
-    monthButtons[0].disabled = true;
-    monthButtons[1].disabled = true;
-    link[0].style.color = "rgba(0,0,0, 0.5)";
+
+    link[2].style.color = "rgba(0,0,0, 0.5)";
   };
 
   render() {
@@ -329,33 +342,67 @@ class Calendar extends Component {
         >
           <span>
             {d}
-            <button
-              value="breakfast"
-              onClick={(e) => {
-                this.onMealClick(e, d);
-              }}
-              className={cx(styles.button, "meal")}
-            >
-              Breakfast
-            </button>
-            <button
-              value="lunch"
-              onClick={(e) => {
-                this.onMealClick(e, d);
-              }}
-              className={cx(styles.button, "meal")}
-            >
-              Lunch
-            </button>
-            <button
-              value="dinner"
-              onClick={(e) => {
-                this.onMealClick(e, d);
-              }}
-              className={cx(styles.button, "meal")}
-            >
-              Dinner
-            </button>
+            {this.state.seen ? (
+              <>
+                <button
+                  value="breakfast"
+                  onClick={(e) => {
+                    this.onMealClick(e, d);
+                  }}
+                  className={cx(styles.darkButton, "meal")}
+                >
+                  Breakfast
+                </button>
+                <button
+                  value="lunch"
+                  onClick={(e) => {
+                    this.onMealClick(e, d);
+                  }}
+                  className={cx(styles.darkButton, "meal")}
+                >
+                  Lunch
+                </button>
+                <button
+                  value="dinner"
+                  onClick={(e) => {
+                    this.onMealClick(e, d);
+                  }}
+                  className={cx(styles.darkButton, "meal")}
+                >
+                  Dinner
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  value="breakfast"
+                  onClick={(e) => {
+                    this.onMealClick(e, d);
+                  }}
+                  className={cx(styles.button, "meal")}
+                >
+                  Breakfast
+                </button>
+                <button
+                  value="lunch"
+                  onClick={(e) => {
+                    this.onMealClick(e, d);
+                  }}
+                  className={cx(styles.button, "meal")}
+                >
+                  Lunch
+                </button>
+                <button
+                  value="dinner"
+                  onClick={(e) => {
+                    this.onMealClick(e, d);
+                  }}
+                  className={cx(styles.button, "meal")}
+                >
+                  Dinner
+                </button>
+              </>
+            )}
           </span>
         </td>
       );
@@ -389,28 +436,43 @@ class Calendar extends Component {
         <div className={styles.calendar_container}>
           <table id="calendar" className={styles.calendar}>
             <thead id="head">
-              <tr className={styles.calendar_header}>
+              <tr id="header" className={styles.calendar_header}>
+                <td colSpan="1">
+                  {" "}
+                  {this.state.seen ? (
+                    <>
+                      <a
+                        id="leftArrow"
+                        className={cx(styles.darkArrow, styles.left)}
+                      ></a>
+                      <a
+                        id="rightArrow"
+                        className={cx(styles.darkArrow, styles.right)}
+                      ></a>
+                    </>
+                  ) : (
+                    <>
+                      <a
+                        id="leftArrow"
+                        className={cx(styles.arrow, styles.left)}
+                        onClick={(e) => {
+                          this.prevMonth();
+                        }}
+                      ></a>
+                      <a
+                        id="rightArrow"
+                        className={cx(styles.arrow, styles.right)}
+                        onClick={(e) => {
+                          this.nextMonth();
+                        }}
+                      ></a>
+                    </>
+                  )}
+                </td>
                 <td colSpan="4">
                   <this.MonthNav id="month" /> <this.YearNav />
                 </td>
-                <td colSpan="1" className={styles.nav_month}>
-                  <button
-                    className={cx(styles.button, "monthButton")}
-                    onClick={(e) => {
-                      this.prevMonth();
-                    }}
-                  >
-                    Previous month
-                  </button>
-                  <button
-                    className={cx(styles.button, "monthButton")}
-                    onClick={(e) => {
-                      this.nextMonth();
-                    }}
-                  >
-                    Next month
-                  </button>
-                </td>
+
                 <td colSpan="1">
                   <AccountCircleIcon style={{ fontSize: "4rem" }} />
                   <Link
@@ -421,6 +483,7 @@ class Calendar extends Component {
                       textDecoration: "none",
                       color: "white"
                     }}
+                    id="link"
                   >
                     Logout
                   </Link>

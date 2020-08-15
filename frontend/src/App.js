@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 
 import { Switch, Route, Redirect } from "react-router-dom";
-import Table from "../src/components/table";
 import LoginForm from "../src/components/loginForm";
 
 import axios from "axios";
@@ -13,29 +12,27 @@ import Swal from "sweetalert2";
 class App extends Component {
   constructor() {
     super();
+    // loggedIn checks whether user is logged in or not
+    // username keeps tracks of the username if the user is logged in
+    // fromLogout checks if the redirect to home page was from the user logging out or not
     this.state = {
       loggedIn: null,
       username: null,
       fromLogout: null
     };
-    this.getUser = this.getUser.bind(this);
-    this.updateUser = this.updateUser.bind(this);
   }
-
+  // check if user is logged in and the user's username
   componentDidMount() {
     console.log("will mount");
     this.getUser();
   }
-
-  updateUser(userObject) {
+  // updates user state
+  updateUser = (userObject) => {
     this.setState(userObject);
-  }
-
-  getUser() {
+  };
+  // talks to backend authentication setup to get logged in status
+  getUser = () => {
     axios.get("/check_user").then((response) => {
-      console.log("hi");
-      console.log("get user", response.data);
-
       if (response.data.username) {
         this.setState({
           loggedIn: true,
@@ -50,67 +47,19 @@ class App extends Component {
         });
       }
     });
-  }
+  };
 
   render() {
-    const setState1 = {
-      name: "",
-      mass: "",
-      unit: "",
-      carbs: "",
-      fat: "",
-      protein: "",
-      calories: ""
-    };
-    const setState2 = null;
-
     if (this.state.loggedIn == null) {
       return null;
     } else {
       return (
         <>
-          <Route
-            path="/user"
-            render={() => {
-              console.log("user");
-              console.log(this.state.loggedIn);
-              if (this.state.loggedIn === true)
-                return (
-                  <NavBar
-                    updateUser={this.updateUser}
-                    loggedIn={this.state.loggedIn}
-                  ></NavBar>
-                );
-              else {
-                console.log("redirecting", this.state.loggedIn);
-                if (this.state.fromLogout === true) {
-                  return (
-                    <Redirect
-                      to={{
-                        pathname: "/"
-                      }}
-                    ></Redirect>
-                  );
-                } else {
-                  return (
-                    <Redirect
-                      to={{
-                        pathname: "/",
-                        state: { message: "Log In to Access this page" }
-                      }}
-                    ></Redirect>
-                  );
-                }
-              }
-            }}
-          ></Route>
           <Switch>
             <Route
               exact
               path="/"
               render={(props) => {
-                console.log("message props is", props.location.state);
-                console.log(this.state.loggedIn);
                 if (props.location.state) {
                   if (
                     props.location.state.message ===
@@ -134,7 +83,7 @@ class App extends Component {
                 if (this.state.loggedIn === true) {
                   return <Redirect to="/calendar"></Redirect>;
                 }
-                console.log(this.state.loggedIn);
+
                 return (
                   <>
                     <NavBar
@@ -168,8 +117,8 @@ class App extends Component {
                       <Calendar
                         updateUser={this.updateUser}
                         loggedIn={this.state.loggedIn}
-                        width="2000px"
                         onDayClick={(e, day) => this.onDayClick(e, day)}
+                        username={this.state.username}
                       ></Calendar>
                     </>
                   );

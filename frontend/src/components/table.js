@@ -316,6 +316,11 @@ class Table extends Component {
       <Draggable>
         <div className={styles.container}>
           <div className={styles.container2}>
+            <h2 className={styles.date}>
+              {this.props.date}{" "}
+              {this.props.meal.charAt(0).toUpperCase() +
+                this.props.meal.slice(1)}
+            </h2>
             <button
               type="button"
               className={styles.button}

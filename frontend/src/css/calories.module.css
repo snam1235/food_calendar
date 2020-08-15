@@ -7,7 +7,7 @@
   height: "calc(100vh - 100px)";
   position: absolute;
   top: 10%;
-  left: 25%;
+  left: 10%;
   z-index: 1;
   cursor: move;
   
@@ -186,3 +186,6 @@ input {
   color: black;
 }
 
+.date{
+  color:white;
+}
