@@ -1,11 +1,10 @@
 html {
-  margin: 0px;
-  height: 100%;
+  height: 100% 
 }
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 .full{
   position: relative;
-  height: 100%;
+  height: 100% ;
   font-family: "Roboto", sans-serif;
   background: rgb(212,178,211);
   background: radial-gradient(circle, rgba(212,178,211,1) 22%, rgba(174,225,238,0.9724264705882353) 73%, rgba(148,187,233,1) 100%);
@@ -18,65 +17,43 @@ html {
   height: 100%;
   
 }
-.nav_contain {
-  display: inline;
-  padding-right: 50px;
 
-}
 
 .button {
   font-family: "Roboto", sans-serif;
-  font-size: 25px;
+  font-size: 2rem;
   color: black;
 }
 
-.nav_text {
-  text-decoration: none;
-  color: white;
-}
 
 
-.signup {
-  font-size: 25px;
-}
 
-.logout {
-  color: Black;
-}
 
 .label {
-  font-size: 25px;
+  font-size: 1.5rem;
   color: black;
 }
 
 
 .login {
   position: relative;
-  top: 300px;
+  top: 20rem;
   border-style: solid;
   border-color: white;
-  border-width: 1px;
-  border-radius: 100px;;
-  width: 900px;
-  height: 300px;
-  
+  border-width: 0.5rem;
+  border-radius: 4rem;
+  width: 60rem;
+  height: 20rem;
 }
 
-.material-icons.md-48 {
-  font-size: 100px;
-  position: relative;
-}
+
 
 .input {
-  font-size: 20px;
-  width: 180px;
+  font-size: 1.5rem;
+  width: 10rem
 }
 
 
-.logoutLink{
-  text-decoration: none;
-  font-size:40px;
-}
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
 .heading{
   margin:0;

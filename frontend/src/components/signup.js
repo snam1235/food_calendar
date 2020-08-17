@@ -13,17 +13,15 @@ class Signup extends Component {
       pswCheck: "",
       redirectTo: null
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.myChangeHandler = this.myChangeHandler.bind(this);
   }
 
-  myChangeHandler(event) {
+  myChangeHandler = (event) => {
     let name = event.target.name;
     let val = event.target.value;
 
     this.setState({ [name]: val });
-  }
-  handleSubmit(event) {
+  };
+  handleSubmit = (event) => {
     event.preventDefault();
     if (this.state.pswCheck !== this.state.psw) {
       Swal.fire({
@@ -59,7 +57,7 @@ class Signup extends Component {
           });
         }
       });
-  }
+  };
   render() {
     if (this.state.redirectTo) {
       return (
@@ -106,6 +104,7 @@ class Signup extends Component {
           <input
             type="password"
             placeholder="Repeat Password"
+            className={styles.password}
             id="passcheck"
             name="pswCheck"
             required

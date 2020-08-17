@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styles from "../css/calories.module.css";
-import { Route } from "react-router-dom";
+
 import axios from "axios";
 import Swal from "sweetalert2";
 import Draggable from "react-draggable";
@@ -20,10 +20,11 @@ class Table extends Component {
     this.addInfoRow = this.addInfoRow.bind(this);
     this.getData = this.getData.bind(this);
   }
+  // display saved history for the selected day and meal
   componentDidMount() {
     this.getData();
   }
-
+  // unit select component
   unitSelect = () => {
     return (
       <select className={styles.select} name="unit">
@@ -42,7 +43,7 @@ class Table extends Component {
       </select>
     );
   };
-
+  // handler when user clicks on "add row" button, adds one row to current table
   addRow = () => {
     let newRow = {
       name: "",
@@ -59,6 +60,7 @@ class Table extends Component {
       rows: currentRows
     });
   };
+  // handler when user clicks on "delete row" button, deletes one row frpm current table
   deleteRow = () => {
     if (this.state.rows.length > 1) {
       let currentRows = this.state.rows;
@@ -66,7 +68,7 @@ class Table extends Component {
       this.setState({ rows: currentRows });
     }
   };
-
+  // talk to backend server that uses 3rd party api to bring food nutrition info
   search(event) {
     let foods = [];
     let units = [];
@@ -91,8 +93,8 @@ class Table extends Component {
       food = food.trim().replace(" ", "%20");
       foods[i] = food;
       units[i] = table.rows[i + 1].cells[2].children[0].value;
-
       quantities[i] = parseInt(table.rows[i + 1].cells[1].innerHTML);
+
       //error message if quantity/mass input is invalid
       if (isNaN(quantities[i])) {
         Swal.fire({
@@ -226,8 +228,10 @@ class Table extends Component {
           Swal.fire({ icon: "success", title: "Saved!" });
         }
       });
+    // state change for triggering css animation on "save" button
     this.setState({ save: !this.state.save });
   }
+  // helper method that takes nutrition info and updates "row" state with it
   addInfoRow(infos) {
     let currentRows = this.state.rows;
     let newRow = {
@@ -239,13 +243,12 @@ class Table extends Component {
       protein: infos.protein,
       calories: infos.calories
     };
-
+    //add new info to current state
     currentRows.push(newRow);
 
-    console.log(newRow);
-    console.log(currentRows);
     this.setState({ rows: currentRows });
   }
+  // method to be trigger when component mounts, displays food history of selected day and meal
   async getData() {
     //gets user input
     let param = {
@@ -267,7 +270,7 @@ class Table extends Component {
         return res.data;
       })
       .then((data) => {
-        // if response is failure show alert message to client
+        // if response is a failure ,show alert message to client
 
         if (data == null) {
           Swal.fire({
@@ -283,24 +286,18 @@ class Table extends Component {
           });
         } else {
           // if response is success, show user's food history data in table
-          console.log("message is");
-          console.log(data.message);
-
           let currentRows = this.state.rows;
           currentRows.pop();
-          console.log("current Row is");
-          console.log(currentRows);
+
           this.setState({ rows: currentRows });
 
           let mealCount = data.message.length;
           let i = 0;
-
+          // update row state with helper method
           for (i; i < mealCount - 1; i++) {
-            console.log("first row");
-            console.log(data.message[i]);
             this.addInfoRow(data.message[i]);
           }
-
+          //update "total" row which is the last row in the table
           let lastRow = document.getElementById("myTable").rows[
             document.getElementById("myTable").rows.length - 1
           ];
@@ -389,16 +386,16 @@ class Table extends Component {
                   </tr>
                 ))}
 
-                <tr className={styles.total} id="total">
-                  <th className={styles.th} name="name">
+                <tr id="total">
+                  <th className={styles.total} name="name">
                     Total
                   </th>
-                  <td className={styles.td} name="mass"></td>
-                  <td className={styles.td} name="unit"></td>
-                  <td className={styles.td} name="carb"></td>
-                  <td className={styles.td} name="fat"></td>
-                  <td className={styles.td} name="protein"></td>
-                  <td className={styles.td} name="calories"></td>
+                  <td className={styles.total} name="mass"></td>
+                  <td className={styles.total} name="unit"></td>
+                  <td className={styles.total} name="carb"></td>
+                  <td className={styles.total} name="fat"></td>
+                  <td className={styles.total} name="protein"></td>
+                  <td className={styles.total} name="calories"></td>
                 </tr>
               </tbody>
             </table>

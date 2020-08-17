@@ -47,19 +47,19 @@ class LoginForm extends Component {
         }
       })
       .catch((error) => {
-        console.log("login error: ");
-        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Error"
+        });
       });
   };
   render() {
-    console.log("rendered");
-
     return (
       <div className={styles.full}>
         <h1 className={styles.heading}>Food Calendar</h1>
         <form>
           <div className={cx(styles.container, styles.login)}>
-            <AccountCircleIcon style={{ fontSize: 100 }} />
+            <AccountCircleIcon style={{ fontSize: "6rem" }} />
             <label className={styles.label}>Email</label>
             <input
               type="email"

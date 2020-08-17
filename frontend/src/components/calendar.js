@@ -3,9 +3,7 @@ import moment from "moment";
 import styles from "../css/calendar.module.css";
 import Table from "./table";
 import axios from "axios";
-
 import cx from "classnames";
-
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { Link } from "react-router-dom";
 
@@ -18,17 +16,14 @@ class Calendar extends Component {
     selectedDay: null,
     seen: false,
     route: null,
-    meal: null,
-    arrowDisable: false
+    meal: null
   };
 
   constructor(props) {
     super(props);
-    this.width = props.width || "350px";
-    this.handleLogout = this.handleLogout.bind(this);
   }
-
-  handleLogout(event) {
+  //logout and update state of parent component
+  handleLogout = (event) => {
     axios
       .get("/logout")
       .then((response) => {
@@ -41,7 +36,7 @@ class Calendar extends Component {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
   weekdays = moment.weekdays(); //["Sunday", "Monday", "Tuesday", "Wednessday", "Thursday", "Friday", "Saturday"]
   weekdaysShort = moment.weekdaysShort(); // ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
   months = moment.months();
@@ -68,7 +63,7 @@ class Calendar extends Component {
     let firstDay = moment(dateContext).startOf("month").format("d"); // Day of week 0...1..5...6
     return firstDay;
   };
-
+  //changes month of state
   setMonth = (month) => {
     let monthNo = this.months.indexOf(month);
     let dateContext = this.state.dateContext;
@@ -93,13 +88,14 @@ class Calendar extends Component {
       dateContext: dateContext
     });
   };
-
+  //handles user clicking on the month they choose on the months list
   onSelectChange = (e, data) => {
     this.setMonth(data);
     this.setState({
       showMonthPopup: false
     });
   };
+  // months list
   SelectList = (props) => {
     let popup = props.data.map((data) => {
       return (
@@ -136,7 +132,7 @@ class Calendar extends Component {
       showMonthPopup: true
     });
   };
-
+  // container for the months list
   MonthNav = () => {
     return (
       <span
@@ -151,13 +147,13 @@ class Calendar extends Component {
       </span>
     );
   };
-
+  // triggers year editor
   showYearEditor = () => {
     this.setState({
       showYearNav: !this.state.showYearNav
     });
   };
-
+  // changes year in state to user's choice
   setYear = (year) => {
     let dateContext = this.state.dateContext;
     dateContext = moment(dateContext).set("year", year);
@@ -169,7 +165,7 @@ class Calendar extends Component {
     this.setYear(e.target.value);
     this.props.onYearChange && this.props.onYearChange(e, e.target.value);
   };
-
+  // handles onKeyUp event of year editor
   onKeyUpYear = (e) => {
     if (e.which === 13 || e.which === 27) {
       this.setYear(e.target.value);
@@ -178,7 +174,7 @@ class Calendar extends Component {
       });
     }
   };
-
+  // year editor component
   YearNav = () => {
     return this.state.showYearNav ? (
       <input
@@ -207,6 +203,7 @@ class Calendar extends Component {
       </span>
     );
   };
+  // when user clicks on the close button of table popup, close the popup and return the darkened calendar background back to normal
   closeTable = () => {
     this.setState({
       seen: !this.state.seen
@@ -219,14 +216,7 @@ class Calendar extends Component {
     const link = document.getElementsByTagName("a");
     const meals = document.getElementsByClassName("meal");
     const header = document.getElementById("header");
-    this.setState({ darkArrow: !this.state.darkArrow });
-    /*
-    
-    la.style.borderTopColor = "white";
-    la.style.borderRightColor = "white";
-    ra.style.borderTopColor = "white";
-    ra.style.borderRightColor = "white";
-    */
+
     header.style.borderColor = "skyblue";
     month.style.color = "white";
     year[0].style.color = "white";
@@ -243,7 +233,7 @@ class Calendar extends Component {
 
     link[2].style.color = "white";
   };
-
+  // when user clicks on a date, change the datecontext state to the selected day
   onDayClick = (e, day) => {
     let dateContext = this.state.dateContext;
     dateContext = moment(dateContext).set("date", day);
@@ -254,6 +244,7 @@ class Calendar extends Component {
       selectedDay: day
     });
   };
+  // when user clicks on a certain meal of a certain day
   onMealClick = (e, day) => {
     let dateContext = this.state.dateContext;
     dateContext = moment(dateContext).set("date", day);
@@ -261,12 +252,10 @@ class Calendar extends Component {
       dateContext: dateContext
     });
 
-    this.setState(
-      {
-        selectedDay: day
-      },
-      () => console.log(this.state.dateContext)
-    );
+    this.setState({
+      selectedDay: day
+    });
+
     this.setState({
       seen: !this.state.seen
     });
@@ -282,7 +271,6 @@ class Calendar extends Component {
     const meals = document.getElementsByClassName("meal");
     const header = document.getElementById("header");
 
-    this.setState({ darkArrow: !this.state.darkArrow });
     header.style.borderColor = "rgba(0,0,0, 0.9)";
     month.style.color = "rgba(0,0,0, 0.5)";
     year[0].style.color = "rgba(0,0,0, 0.5)";
@@ -308,7 +296,7 @@ class Calendar extends Component {
         </td>
       );
     });
-
+    // empty table slots for slots before the first day of the month
     let blanks = [];
     for (let i = 0; i < this.firstDayOfMonth(); i++) {
       blanks.push(
@@ -319,11 +307,13 @@ class Calendar extends Component {
     }
 
     let daysInMonth = [];
+    //create all day slots of the calendar
     for (let d = 1; d <= this.daysInMonth(); d++) {
       let param = {
         Meal: "breakfast",
         Date: ``
       };
+      // different classname for selected day, current day, and other days
       let className =
         d == this.state.today.get("date") &&
         this.state.dateContext.get("year") == this.state.today.get("year") &&
@@ -407,7 +397,7 @@ class Calendar extends Component {
         </td>
       );
     }
-
+    // creates all rows and cells of the calendar
     var totalSlots = [...blanks, ...daysInMonth];
     let rows = [];
     let cells = [];
@@ -426,7 +416,7 @@ class Calendar extends Component {
         rows.push(insertRow);
       }
     });
-
+    // final output of all table cells
     let trElems = rows.map((d, i) => {
       return <tr key={i * 100}>{d}</tr>;
     });

@@ -2,9 +2,7 @@ import React, { Component } from "react";
 
 import { Switch, Route, Redirect } from "react-router-dom";
 import LoginForm from "../src/components/loginForm";
-
 import axios from "axios";
-import NavBar from "../src/components/navBar";
 import Signup from "../src/components/signup";
 import Calendar from "../src/components/calendar";
 import Swal from "sweetalert2";
@@ -60,6 +58,7 @@ class App extends Component {
               exact
               path="/"
               render={(props) => {
+                //if redirected from a different route with message, display message to user
                 if (props.location.state) {
                   if (
                     props.location.state.message ===
@@ -77,22 +76,15 @@ class App extends Component {
                       text: props.location.state.message
                     });
                   }
-                  props.location.state = null;
+                  //clear previous message so it doesn't repeat on refresh
+                  window.history.replaceState(null, "");
                 }
-
+                // home page shouldn't be accessible when logged in, so redirect to calendar page
                 if (this.state.loggedIn === true) {
                   return <Redirect to="/calendar"></Redirect>;
                 }
-
-                return (
-                  <>
-                    <NavBar
-                      updateUser={this.updateUser}
-                      loggedIn={this.state.loggedIn}
-                    ></NavBar>
-                    <LoginForm updateUser={this.updateUser} />
-                  </>
-                );
+                // else return loginform component
+                return <LoginForm updateUser={this.updateUser} />;
               }}
             ></Route>
 
@@ -100,6 +92,7 @@ class App extends Component {
               exact
               path="/signup"
               render={() => {
+                // signup page shouldn't be accessible when logged in, so redirect to calendar page
                 if (this.state.loggedIn === true) {
                   return <Redirect to="/calendar"></Redirect>;
                 }
@@ -111,6 +104,7 @@ class App extends Component {
               exact
               path="/calendar"
               render={() => {
+                //render only if user is logged in
                 if (this.state.loggedIn === true) {
                   return (
                     <>
@@ -123,7 +117,7 @@ class App extends Component {
                     </>
                   );
                 } else {
-                  console.log("redirecting", this.state.loggedIn);
+                  // if user logged out, redirect to homepage
                   if (this.state.fromLogout === true) {
                     return (
                       <Redirect
@@ -133,6 +127,7 @@ class App extends Component {
                       ></Redirect>
                     );
                   } else {
+                    // else this is a user that is not logged in trying to access page, redirect with alert message
                     return (
                       <Redirect
                         to={{
