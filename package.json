@@ -23,6 +23,6 @@
     "url": "https://github.com/snam1235/fitness_app/issues"
   },
   "dependencies": {
-    "concurrently": "^5.3.0"
+    "concurrently": "^5.2.0"
   }
 }
