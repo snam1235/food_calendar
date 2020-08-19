@@ -21,6 +21,13 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "build", "index.html"));
   });
 }
+app.get("/api/message", async (req, res, next) => {
+  try {
+    res.status(201).json({ message: "HELLOOOOO FROM EXPRESS" });
+  } catch (err) {
+    next(err);
+  }
+});
 
 app.use(bodyParser.json());
 

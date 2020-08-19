@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
+    "http-proxy-middleware": "^1.0.5",
     "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.27.0",
     "react": "^16.13.1",
@@ -21,7 +22,6 @@
     "sweetalert2": "^9.15.2",
     "sweetalert2-react": "^0.8.3"
   },
-  "proxy": "http://localhost:5000",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
