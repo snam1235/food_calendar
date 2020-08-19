@@ -18,16 +18,9 @@ app.use(express.static("public"));
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("../frontend/build"));
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "build", "index.html"));
+    res.sendFile(path.join(__dirname, "../frontend/build"));
   });
 }
-app.get("/api/message", async (req, res, next) => {
-  try {
-    res.status(201).json({ message: "HELLOOOOO FROM EXPRESS" });
-  } catch (err) {
-    next(err);
-  }
-});
 
 app.use(bodyParser.json());
 

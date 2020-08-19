@@ -22,8 +22,10 @@ class App extends Component {
   // check if user is logged in and the user's username
   componentDidMount() {
     console.log("will mount");
+
     this.getUser();
   }
+
   // updates user state
   updateUser = (userObject) => {
     this.setState(userObject);
