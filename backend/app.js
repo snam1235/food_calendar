@@ -10,11 +10,17 @@ const MongoStore = require("connect-mongo")(session);
 const passport = require("passport");
 const db = require("./lib/db");
 const auth = require("./lib/auth");
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 db.connect();
 
 app.use(express.static("public"));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("../frontend/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "build", "index.html"));
+  });
+}
 
 app.use(bodyParser.json());
 
@@ -27,7 +33,7 @@ app.use(
     secret: "codeworkrsecret",
     saveUninitialized: false,
     resave: true,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
   })
 );
 
