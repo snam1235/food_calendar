@@ -29,7 +29,7 @@ class LoginForm extends Component {
         password: this.state.password
       })
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
         if (response.data.username) {
           // update App.js state
 
