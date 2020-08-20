@@ -7,10 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "cd frontend && npm start",
     "server": "cd backend && npm start",
-    "start": "node backend/app.js",
-    "build": "cd frontend && npm run build",
-    "install-client": "cd frontend && npm install",
-    "heroku-postbuild": "npm run install-client && npm run build"
+    "dev": "concurrently - kill-others \"npm run server\" \"npm run client\"",
+    "start": "cd backend && node app.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "repository": {
     "type": "git",

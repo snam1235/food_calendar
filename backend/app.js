@@ -11,6 +11,7 @@ const passport = require("passport");
 const db = require("./lib/db");
 const auth = require("./lib/auth");
 const port = process.env.PORT || 5000;
+const path = require("path");
 
 db.connect();
 
@@ -18,7 +19,7 @@ app.use(express.static("public"));
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("../frontend/build"));
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend/build"));
+    res.sendFile(path.join(__dirname, "..", "frontend", "build", "index.html"));
   });
 }
 
