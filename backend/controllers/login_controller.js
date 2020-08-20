@@ -7,7 +7,7 @@ module.exports.index = function (req, res) {
 
 module.exports.check_empty_login = function (req, res, next) {
   // if login input is invalid flash error essage
-  if (!req.body.email) {
+  if (!req.body.username) {
     return res.send("Please enter an email");
   } else if (!req.body.password) {
     return res.send("Please enter a password");
