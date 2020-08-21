@@ -15,7 +15,23 @@ module.exports.check_empty_login = function (req, res, next) {
   next();
 };
 
-module.exports.authenticate = passport.authenticate("local", {
-  failureRedirect: "/login_fail",
-  failureFlash: true
-});
+module.exports.authenticate = function (req, res, next) {
+  passport.authenticate("local", function (err, user, info) {
+    if (err) {
+      return res.send(err);
+    }
+    if (info) {
+      console.log(info);
+      return res.send(info.message);
+    }
+    req.logIn(user, function (err) {
+      if (err) {
+        return next(err);
+      }
+      let User = {
+        username: user.email
+      };
+      res.send(User);
+    });
+  })(req, res, next);
+};

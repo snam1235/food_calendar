@@ -14,22 +14,15 @@ passport.use(
         const user = await UserModel.findOne({ email: username }).exec();
         if (!user) {
           console.log("no user");
-          return done(
-            null,
-            false,
-            req.flash("message", "Login Failed: Email not registered")
-          );
+          return done(null, false, { message: "Email is not registered" });
         }
         //check password to authenticate user
         const passwordOK = await user.comparePassword(password);
         console.log("passwordOk is", passwordOK);
         if (!passwordOK) {
           console.log("wrong psw");
-          return done(
-            null,
-            false,
-            req.flash("message", "Login Failed: Wrong Password")
-          );
+
+          return done(null, false, { message: "Wrong Password" });
         }
         //successfully logged in
         console.log("login worked!");
