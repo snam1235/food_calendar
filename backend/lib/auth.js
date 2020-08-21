@@ -9,23 +9,19 @@ passport.use(
     { passReqToCallback: true },
     async (req, username, password, done) => {
       try {
-        console.log("login attempt");
         //find user with the entered email
         const user = await UserModel.findOne({ email: username }).exec();
         if (!user) {
-          console.log("no user");
           return done(null, false, { message: "Email is not registered" });
         }
         //check password to authenticate user
         const passwordOK = await user.comparePassword(password);
-        console.log("passwordOk is", passwordOK);
-        if (!passwordOK) {
-          console.log("wrong psw");
 
+        if (!passwordOK) {
           return done(null, false, { message: "Wrong Password" });
         }
         //successfully logged in
-        console.log("login worked!");
+
         return done(null, user);
       } catch (err) {
         return done(err);
@@ -35,13 +31,11 @@ passport.use(
 );
 //passport saves user info in req.user
 passport.serializeUser((user, done) => {
-  console.log("serialize!");
   done(null, user._id);
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
-    console.log("deserialize");
     const user = await UserModel.findById(id).exec();
     return done(null, user);
   } catch (err) {

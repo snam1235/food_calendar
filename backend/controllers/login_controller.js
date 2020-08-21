@@ -14,14 +14,13 @@ module.exports.check_empty_login = function (req, res, next) {
   }
   next();
 };
-
+//user authentication method
 module.exports.authenticate = function (req, res, next) {
   passport.authenticate("local", function (err, user, info) {
     if (err) {
       return res.send(err);
     }
     if (info) {
-      console.log(info);
       return res.send(info.message);
     }
     req.logIn(user, function (err) {

@@ -43,7 +43,8 @@ class LoginForm extends Component {
           Swal.fire({
             icon: "error",
             title: "Error",
-            text: response.data
+            text: response.data,
+            backdrop: false
           });
         }
       })

@@ -16,6 +16,8 @@ const path = require("path");
 db.connect();
 
 app.use(express.static("public"));
+
+// direct path after build is run
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("../frontend/build"));
   app.get("*", (req, res) => {
