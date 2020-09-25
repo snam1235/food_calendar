@@ -134,18 +134,32 @@ class Calendar extends Component {
   };
   // container for the months list
   MonthNav = () => {
-    return (
-      <span
-        id="month"
-        className={styles.label_month}
-        onMouseOver={(e) => {
-          this.onChangeMonth(e, this.month());
-        }}
-      >
-        {this.month()}
-        {this.state.showMonthPopup && <this.SelectList data={this.months} />}
-      </span>
-    );
+    if (this.state.showMonthPopup) {
+      return (
+        <span
+          id="month"
+          className={styles.label_month}
+          onMouseOver={(e) => {
+            this.onChangeMonth(e, this.month());
+          }}
+        >
+          {this.month()}
+          <this.SelectList data={this.months} />
+        </span>
+      );
+    } else {
+      return (
+        <span
+          id="month"
+          className={styles.label_month}
+          onMouseOver={(e) => {
+            this.onChangeMonth(e, this.month());
+          }}
+        >
+          {this.month()}
+        </span>
+      );
+    }
   };
   // triggers year editor
   showYearEditor = () => {
