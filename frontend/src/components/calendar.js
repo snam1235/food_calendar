@@ -143,6 +143,7 @@ class Calendar extends Component {
         }}
       >
         {this.month()}
+        <this.SelectList data={this.months} />
       </span>
     );
   };
