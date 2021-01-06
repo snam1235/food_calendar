@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import { Switch, Route, Redirect } from "react-router-dom";
 import LoginForm from "../src/components/loginForm";
 import axios from "axios";

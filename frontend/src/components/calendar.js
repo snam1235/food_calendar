@@ -99,12 +99,13 @@ class Calendar extends Component {
   SelectList = (props) => {
     let popup = props.data.map((data) => {
       return (
-        <div key={data}>
+        <div key={data} className={styles.month_popup_content}>
           <a
             href="#"
             onClick={(e) => {
               this.onSelectChange(e, data);
             }}
+            className = {styles.months}
             style={{ textDecoration: "none", color: "black" }}
           >
             {data}
@@ -127,25 +128,41 @@ class Calendar extends Component {
     );
   };
 
-  onChangeMonth = (e, month) => {
+  onChangeMonth = () => {
     this.setState({
-      showMonthPopup: true
+      showMonthPopup:  !this.state.showMonthPopup
     });
   };
   // container for the months list
   MonthNav = () => {
-    return (
+    
+    return this.state.showMonthPopup ? 
+    (
+      <div className={styles.month_popup_container}>
       <span
         id="month"
         className={styles.label_month}
-        onMouseOver={(e) => {
-          this.onChangeMonth(e, this.month());
-        }}
+       
       >
         {this.month()}
-        <this.SelectList data={this.months} />
       </span>
-    );
+    <this.SelectList data={this.months} />
+    </div>
+    )
+    :
+    (
+      <span
+        id="month"
+        className={styles.label_month}
+        onMouseEnter={(e) => {
+          this.onChangeMonth(e, this.month());
+        }}
+       
+      >
+        {this.month()}
+        
+      </span>
+    )
   };
   // triggers year editor
   showYearEditor = () => {

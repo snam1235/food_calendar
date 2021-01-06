@@ -83,10 +83,17 @@
 
 .month_popup {
   position: absolute;
+  display:block;
   background: white;
   border: 0.2rem solid skyblue;
   overflow-y: scroll;
-  height: 20rem;
+  height: 25rem;
+  width: 25rem;
+  font-size: 3rem;
+}
+.month_popup_container{
+  position:relative;
+  display: inline;
 }
 
 .month_popup div {
