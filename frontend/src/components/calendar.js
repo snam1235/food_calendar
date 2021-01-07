@@ -96,8 +96,16 @@ class Calendar extends Component {
     });
   };
   // months list
-  SelectList = ({datas}) => {
-    let popup = datas.map((data) => {
+  
+
+  onChangeMonth = () => {
+    this.setState({
+      showMonthPopup:  !this.state.showMonthPopup
+    });
+  };
+  // container for the months list
+  MonthNav = () => {
+    let popup = this.months.map((data) => {
       return (
         <div key={data} className={styles.month_popup_content}>
           <a
@@ -113,8 +121,7 @@ class Calendar extends Component {
         </div>
       );
     });
-
-    return (
+    let SelectList =
       <div
         className={styles.month_popup}
         onMouseLeave={(e) => {
@@ -125,16 +132,6 @@ class Calendar extends Component {
       >
         {popup}
       </div>
-    );
-  };
-
-  onChangeMonth = () => {
-    this.setState({
-      showMonthPopup:  !this.state.showMonthPopup
-    });
-  };
-  // container for the months list
-  MonthNav = () => {
     
     return this.state.showMonthPopup ? 
     (
@@ -146,7 +143,7 @@ class Calendar extends Component {
       >
         {this.month()}
       </span>
-    <this.SelectList datas ={this.months} />
+    {SelectList}
     </div>
     )
     :
