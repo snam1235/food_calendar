@@ -96,8 +96,8 @@ class Calendar extends Component {
     });
   };
   // months list
-  SelectList = (props) => {
-    let popup = props.data.map((data) => {
+  SelectList = ({datas}) => {
+    let popup = datas.map((data) => {
       return (
         <div key={data} className={styles.month_popup_content}>
           <a
@@ -146,7 +146,7 @@ class Calendar extends Component {
       >
         {this.month()}
       </span>
-    
+    <this.SelectList datas ={this.months} />
     </div>
     )
     :
