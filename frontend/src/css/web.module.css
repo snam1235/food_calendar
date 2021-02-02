@@ -1,11 +1,11 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');  
 .full{
   position: relative;
   height: 100% ;
-  font-family: "Roboto", sans-serif;
-  background: rgb(212,178,211);
-  background: radial-gradient(circle, rgba(212,178,211,1) 22%, rgba(174,225,238,0.9724264705882353) 73%, rgba(148,187,233,1) 100%);
+  font-family: 'Montserrat', sans-serif;
+  background-image: url("../images/food.jpg")
 }
 .container {
   display: flex;
@@ -18,9 +18,14 @@
 
 
 .button {
-  font-family: "Roboto", sans-serif;
-  font-size: 2rem;
-  color: black;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  color: white;
+  border-radius: 40%;
+  border-style: solid;
+  border-width: 0.2rem;
+  border-color: white;
+  background-color: transparent;
 }
 
 
@@ -29,7 +34,7 @@
 
 .label {
   font-size: 1.5rem;
-  color: black;
+  color: white;
 }
 
 
@@ -41,7 +46,7 @@
   border-width: 0.5rem;
   border-radius: 4rem;
   width: 60rem;
-  height: 20rem;
+  height: 15rem;
 }
 
 
@@ -52,7 +57,7 @@
 }
 
 
-@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
+
 .heading{
   margin:0;
   position: absolute;
@@ -61,6 +66,6 @@
   transform: translate(-50%, -50%);
   margin-right: -50%;
   color:white;
-  font-family: 'Amatic SC', cursive;
-  font-size: 6rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 4.5rem;
 }

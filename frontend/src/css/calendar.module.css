@@ -29,8 +29,10 @@
   border-spacing: 0;
   border-collapse: collapse;
   width: 300%;
-  background-color: #faaca8;
-  background-image: linear-gradient(19deg, #faaca8 0%, #ddd6f3 100%);
+  background-image: url("../images/food4.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .calendar_header {
@@ -60,25 +62,22 @@
   cursor: pointer;
   width: 6rem;
   height: 8rem;
+  border-style: solid;
+  border-radius: 2%;
+  border-width: 0.2rem;
+  border-color: white;
 }
 
 .current_day {
   width: 6rem;
   height: 8rem;
-  border-style: solid;
-  border-radius: 2%;
-  border-width: 0.2rem;
-  border-color: black;
+  background-color: lightblue;
   color: black;
 }
 .selected_day {
   width: 6rem;
   height: 8rem;
-  border-style: solid;
-  border-width: 0.2rem;
-  border-color: white;
-  border-radius: 2%;
- 
+  background-color: lightgreen !important;
 }
 
 .month_popup {
@@ -121,8 +120,7 @@
 .button {
   font-family: "Roboto", sans-serif;
   border-radius: 1rem;
-  background-color: #faaca8;
-  background-image: linear-gradient(19deg, #faaca8 0%, #ddd6f3 100%);
+  background-color: rgba(0,0,0, 0.5);
   color:white;
   font-size:1.0rem;
   border-color: white;

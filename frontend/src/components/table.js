@@ -400,7 +400,7 @@ class Table extends Component {
               </tbody>
             </table>
 
-            <div class="container">
+            <div className="container">
               <button
                 id="save"
                 className={

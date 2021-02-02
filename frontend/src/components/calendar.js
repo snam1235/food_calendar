@@ -51,7 +51,7 @@ class Calendar extends Component {
     return this.state.dateContext.daysInMonth();
   };
   currentDate = () => {
-    console.log("currentDate: ", this.state.dateContext.get("date"));
+    
     return this.state.dateContext.get("date");
   };
   currentDay = () => {
@@ -219,9 +219,7 @@ class Calendar extends Component {
   };
   // when user clicks on the close button of table popup, close the popup and return the darkened calendar background back to normal
   closeTable = () => {
-    this.setState({
-      seen: !this.state.seen
-    });
+   
 
     const calendar = document.getElementById("calendar");
     const cells = document.getElementsByTagName("td");
@@ -230,75 +228,133 @@ class Calendar extends Component {
     const link = document.getElementsByTagName("a");
     const meals = document.getElementsByClassName("meal");
     const header = document.getElementById("header");
+    const selected = document.getElementsByClassName(styles.selected_day)[0];
+    const current = document.getElementsByClassName(styles.current_day)[0];
 
-    header.style.borderColor = "skyblue";
-    month.style.color = "white";
-    year[0].style.color = "white";
-    calendar.style.backgroundColor = "#faaca8";
-    calendar.style.backgroundImage =
-      "linear-gradient(19deg, #faaca8 0%, #ddd6f3 100%)";
+    if(selected!=null){
+      console.log("selected is null")
+      selected.style.backgroundColor = "transparent";
+      this.setState({
+        seen: false,
+        selectedDay: null
+      },()=>{
+        if(current!=null){
+          current.style.backgroundColor = "lightblue";
+        }
+        header.style.borderColor = "skyblue";
+        month.style.color = "white";
+        year[0].style.color = "white";
+        calendar.style.backgroundImage =
+          "url('../images/food4.jpg')";
+        calendar.style.backgroundRepeat = "round";
+        for (let i = 0; i < cells.length; i++) {
+          cells[i].style.color = "white";
+        }
+        for (let i = 0; i < meals.length; i++) {
+          meals[i].disabled = false;
+        }
+    
+        link[2].style.color = "white";
 
-    for (let i = 0; i < cells.length; i++) {
-      cells[i].style.color = "white";
+      });
     }
-    for (let i = 0; i < meals.length; i++) {
-      meals[i].disabled = false;
-    }
+   else{
+    this.setState({
+      seen: false} ,()=>{
 
-    link[2].style.color = "white";
+        if(current!=null){
+          current.style.backgroundColor = "lightblue";
+        }
+        header.style.borderColor = "skyblue";
+        month.style.color = "white";
+        year[0].style.color = "white";
+        calendar.style.backgroundImage =
+          "url('../images/food4.jpg')";
+        calendar.style.backgroundRepeat = "round";
+        for (let i = 0; i < cells.length; i++) {
+          cells[i].style.color = "white";
+        }
+        for (let i = 0; i < meals.length; i++) {
+          meals[i].disabled = false;
+        }
+    
+        link[2].style.color = "white";
+
+
+      })
+    
+
+   }
   };
   // when user clicks on a date, change the datecontext state to the selected day
   onDayClick = (e, day) => {
+    e.preventDefault();
+    if(e.target === e.currentTarget){
     let dateContext = this.state.dateContext;
     dateContext = moment(dateContext).set("date", day);
     this.setState({
       dateContext: dateContext
     });
+
     this.setState({
       selectedDay: day
     });
+    }
   };
   // when user clicks on a certain meal of a certain day
   onMealClick = (e, day) => {
     let dateContext = this.state.dateContext;
     dateContext = moment(dateContext).set("date", day);
+   
+ 
     this.setState({
-      dateContext: dateContext
+      seen: true,
+      dateContext: dateContext,
+      meal: e.target.value,
+      selectedDay: null
+    } , ()=>{ 
+  
+    
+      const calendar = document.getElementById("calendar");
+      const cells = document.getElementsByTagName("td");
+      const month = document.getElementById("month");
+      const year = document.getElementsByClassName("year");
+      const link = document.getElementsByTagName("a");
+      const meals = document.getElementsByClassName("meal");
+      const header = document.getElementById("header");
+      //const selected = document.getElementsByClassName(styles.selected_day)[0];
+      const current = document.getElementsByClassName(styles.current_day)[0];
+ 
+      header.style.borderColor = "rgba(0,0,0, 0.9)";
+      month.style.color = "rgba(0,0,0, 0.5)";
+      year[0].style.color = "rgba(0,0,0, 0.5)";
+      calendar.style.backgroundColor = "rgba(0,0,0, 0.9)";
+     // if(selected!=null){
+     //   selected.style.backgroundColor = "rgba(0,0,0, 0.9)";
+     // }
+      if(current!=null){
+        current.style.backgroundColor = "rgba(0,0,0, 0.9)";
+      }
+      calendar.style.backgroundImage = "none";
+  
+      for (let i = 0; i < cells.length; i++) {
+        cells[i].style.color = "rgba(0,0,0, 0.5)";
+      }
+      for (let i = 0; i < meals.length; i++) {
+        meals[i].disabled = true;
+      }
+  
+      link[2].style.color = "rgba(0,0,0, 0.5)";
+
+
+
+
+
+
     });
-
-    this.setState({
-      selectedDay: day
-    });
-
-    this.setState({
-      seen: !this.state.seen
-    });
-    this.setState({
-      meal: e.target.value
-    });
-
-    const calendar = document.getElementById("calendar");
-    const cells = document.getElementsByTagName("td");
-    const month = document.getElementById("month");
-    const year = document.getElementsByClassName("year");
-    const link = document.getElementsByTagName("a");
-    const meals = document.getElementsByClassName("meal");
-    const header = document.getElementById("header");
-
-    header.style.borderColor = "rgba(0,0,0, 0.9)";
-    month.style.color = "rgba(0,0,0, 0.5)";
-    year[0].style.color = "rgba(0,0,0, 0.5)";
-    calendar.style.backgroundColor = "rgba(0,0,0, 0.9)";
-    calendar.style.backgroundImage = "none";
-
-    for (let i = 0; i < cells.length; i++) {
-      cells[i].style.color = "rgba(0,0,0, 0.5)";
-    }
-    for (let i = 0; i < meals.length; i++) {
-      meals[i].disabled = true;
-    }
-
-    link[2].style.color = "rgba(0,0,0, 0.5)";
+ 
+    
+   
   };
 
   render() {
@@ -334,20 +390,17 @@ class Calendar extends Component {
         this.state.dateContext.get("month") == this.state.today.get("month")
           ? cx(styles.day, styles.current_day)
           : styles.day;
+      
       let selectedClass =
         d == this.state.selectedDay ? styles.selected_day : "";
       daysInMonth.push(
-        <td
-          key={d}
-          onClick={(e) => {
-            this.onDayClick(e, d);
-          }}
-          className={cx(className, selectedClass)}
-        >
-          <span>
+            this.state.seen ? (
+               <td
+               key={d}
+               className={cx(className, selectedClass)}
+             >
+               <span>
             {d}
-            {this.state.seen ? (
-              <>
                 <button
                   value="breakfast"
                   onClick={(e) => {
@@ -375,9 +428,18 @@ class Calendar extends Component {
                 >
                   Dinner
                 </button>
-              </>
+                </span>
+              </td>
             ) : (
-              <>
+              <td
+              key={d}
+              onClick={(e) => {
+                this.onDayClick(e, d);
+              }}
+              className={cx(className, selectedClass)}
+            >
+              <span>
+            {d}
                 <button
                   value="breakfast"
                   onClick={(e) => {
@@ -405,10 +467,9 @@ class Calendar extends Component {
                 >
                   Dinner
                 </button>
-              </>
-            )}
-          </span>
-        </td>
+                </span>
+              </td>
+            )
       );
     }
     // creates all rows and cells of the calendar

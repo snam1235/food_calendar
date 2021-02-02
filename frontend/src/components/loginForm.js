@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styles from "../css/web.module.css";
 import cx from "classnames";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import Person from "@material-ui/icons/Person";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -61,7 +61,7 @@ class LoginForm extends Component {
         <h1 className={styles.heading}>Food Calendar</h1>
         <form>
           <div className={cx(styles.container, styles.login)}>
-            <AccountCircleIcon style={{ fontSize: "6rem" }} />
+            <Person style={{ fontSize: "6rem", color: "white"}} />
             <label className={styles.label}>Email</label>
             <input
               type="email"
