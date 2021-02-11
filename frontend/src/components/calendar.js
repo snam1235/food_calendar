@@ -131,18 +131,19 @@ class Calendar extends Component {
     let SelectList =
       <div
         className={styles.month_popup}
-        onMouseLeave={(e) => {
-          this.setState({
-            showMonthPopup: false
-          });
-        }}
+      
       >
         {popup}
       </div>
     // based on state, return jsx element of the list of months, or the current month 
     return this.state.showMonthPopup ? 
     (
-      <div className={styles.month_popup_container}>
+      <div className={styles.month_popup_container}
+      onMouseLeave={(e) => {
+        this.setState({
+          showMonthPopup: false
+        });
+      }}>
       <span
         id="month"
         className={styles.label_month}
