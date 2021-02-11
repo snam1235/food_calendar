@@ -9,11 +9,11 @@
   left: 10%;
   z-index: 1;
   cursor: move;
-  color:white;
+  color:black;
 }
 .container2 {
  
-  background: linear-gradient(to right, #25c481, #25b7c4);
+  background:beige;
   position: absolute;
   border-radius: 2rem;
   overflow-y:scroll;
@@ -26,27 +26,30 @@
 .th,
 .td {
   padding:2rem;
-  border: 0.2rem solid rgba(255,255,255,0.3);
+  border: 0.2rem solid black;
   font-size:1rem
 }
 .th{
   font-size:1rem
 }
 .table {
-  background: linear-gradient(to right, #25c481, #25b7c4);
+  background: beige;
 }
 
+.td{
+  height:3rem;
+}
 
 
 .total {
   border: 0.2rem solid black;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .select {
   font-family: "Roboto", sans-serif;
   border-radius: 0.6rem;
-  height: 5em;
+  height: 3rem;
   text-align: center;
   overflow: hidden;
   
@@ -59,16 +62,16 @@
 .button{
   font-size: 1.4rem;
   transition-duration: 0.4s;
-  border: 0.2rem solid rgba(255,255,255,1);
-  color:white;
+  border: 0.2rem solid black;
+  color:black;
   border-radius:10px;
-  background: linear-gradient(to right, #25c481, #25b7c4);
+  background: white;
   
 }
 
 .button:hover {
   
-  color: black
+  color: orange;
 }
 
 @keyframes glowing {
@@ -76,7 +79,7 @@
     background-color:#f79328; ;
     border-color: #f79328;
     box-shadow: 0 0 1rem #f79328;
-    color:black;
+    color:white;
   }
   50% {
     background-color: #f79328; ;

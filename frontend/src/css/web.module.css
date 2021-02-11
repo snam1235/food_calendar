@@ -5,7 +5,7 @@
   position: relative;
   height: 100% ;
   font-family: 'Montserrat', sans-serif;
-  background-image: url("../images/food.jpg")
+  background-image: url("../images/mainImage.jpg")
 }
 .container {
   display: flex;

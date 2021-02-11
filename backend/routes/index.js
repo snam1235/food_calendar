@@ -1,9 +1,7 @@
 const express = require("express");
-const session = require("express-session");
 const router = express.Router();
 
 // join all routes
-router.use("/calories", require("./calories"));
 router.use("/calories_user", require("./calories_user"));
 router.use("/history", require("./history"));
 router.use("/check_user", require("./check_user"));

@@ -19,9 +19,7 @@ class App extends Component {
     };
   }
   // check if user is logged in and the user's username
-  componentDidMount() {
-    console.log("will mount");
-
+  componentDidMount() { 
     this.getUser();
   }
 
@@ -29,7 +27,7 @@ class App extends Component {
   updateUser = (userObject) => {
     this.setState(userObject);
   };
-  // talks to backend authentication setup to get logged in status
+  // talks to backend authentication setup to see if a user is logged in or not
   getUser = () => {
     axios.get("/check_user").then((response) => {
       if (response.data.username) {

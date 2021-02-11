@@ -8,13 +8,15 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { Link } from "react-router-dom";
 
 class Calendar extends Component {
+
+
   state = {
     dateContext: moment(),
     today: moment(),
     showMonthPopup: false,
     showYearNav: false,
     selectedDay: null,
-    seen: false,
+    showTablePopup: false,
     route: null,
     meal: null
   };
@@ -39,7 +41,7 @@ class Calendar extends Component {
   };
   weekdays = moment.weekdays(); //["Sunday", "Monday", "Tuesday", "Wednessday", "Thursday", "Friday", "Saturday"]
   weekdaysShort = moment.weekdaysShort(); // ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-  months = moment.months();
+  months = moment.months(); // list of all months
 
   year = () => {
     return this.state.dateContext.format("Y");
@@ -63,7 +65,8 @@ class Calendar extends Component {
     let firstDay = moment(dateContext).startOf("month").format("d"); // Day of week 0...1..5...6
     return firstDay;
   };
-  //changes month of state
+
+  //changes month of the dateContext state to the set month
   setMonth = (month) => {
     let monthNo = this.months.indexOf(month);
     let dateContext = this.state.dateContext;
@@ -73,6 +76,7 @@ class Calendar extends Component {
     });
   };
 
+  //changes month of the dateContext state to the next month
   nextMonth = () => {
     let dateContext = this.state.dateContext;
     dateContext = moment(dateContext).add(1, "month");
@@ -80,7 +84,7 @@ class Calendar extends Component {
       dateContext: dateContext
     });
   };
-
+  //changes month of the dateContext state to the previous month
   prevMonth = () => {
     let dateContext = this.state.dateContext;
     dateContext = moment(dateContext).subtract(1, "month");
@@ -95,21 +99,22 @@ class Calendar extends Component {
       showMonthPopup: false
     });
   };
-  // months list
-  
-
-  onChangeMonth = () => {
+ 
+  // changes state of "showMonthPopup", this enables the month list popup to show and disappered based on mouse event
+  monthPopupTrigger = () => {
     this.setState({
       showMonthPopup:  !this.state.showMonthPopup
     });
   };
   // container for the months list
   MonthNav = () => {
+
+    //div containing all months 
     let popup = this.months.map((data) => {
       return (
         <div key={data} className={styles.month_popup_content}>
           <a
-            href="#"
+            href="#month"
             onClick={(e) => {
               this.onSelectChange(e, data);
             }}
@@ -121,6 +126,8 @@ class Calendar extends Component {
         </div>
       );
     });
+
+    // container div for the list of months
     let SelectList =
       <div
         className={styles.month_popup}
@@ -132,7 +139,7 @@ class Calendar extends Component {
       >
         {popup}
       </div>
-    
+    // based on state, return jsx element of the list of months, or the current month 
     return this.state.showMonthPopup ? 
     (
       <div className={styles.month_popup_container}>
@@ -152,7 +159,7 @@ class Calendar extends Component {
         id="month"
         className={styles.label_month}
         onMouseEnter={(e) => {
-          this.onChangeMonth(e, this.month());
+          this.monthPopupTrigger(e, this.month());
         }}
        
       >
@@ -161,13 +168,13 @@ class Calendar extends Component {
       </span>
     )
   };
-  // triggers year editor
+  // triggers year editor based on state
   showYearEditor = () => {
     this.setState({
       showYearNav: !this.state.showYearNav
     });
   };
-  // changes year in state to user's choice
+  // sets year in dateContext state 
   setYear = (year) => {
     let dateContext = this.state.dateContext;
     dateContext = moment(dateContext).set("year", year);
@@ -175,11 +182,11 @@ class Calendar extends Component {
       dateContext: dateContext
     });
   };
+  // changes the year in dataContext
   onYearChange = (e) => {
     this.setYear(e.target.value);
-    this.props.onYearChange && this.props.onYearChange(e, e.target.value);
   };
-  // handles onKeyUp event of year editor
+  // handles onKeyUp event of year editor that changes the year on key event
   onKeyUpYear = (e) => {
     if (e.which === 13 || e.which === 27) {
       this.setYear(e.target.value);
@@ -207,11 +214,11 @@ class Calendar extends Component {
       />
     ) : (
       <span
-        className={styles.label_year}
+        className={cx(styles.label_year,"year")}
         onMouseEnter={(e) => {
           this.showYearEditor();
         }}
-        className="year"
+        
       >
         {this.year()}
       </span>
@@ -219,8 +226,7 @@ class Calendar extends Component {
   };
   // when user clicks on the close button of table popup, close the popup and return the darkened calendar background back to normal
   closeTable = () => {
-   
-
+  
     const calendar = document.getElementById("calendar");
     const cells = document.getElementsByTagName("td");
     const month = document.getElementById("month");
@@ -230,12 +236,11 @@ class Calendar extends Component {
     const header = document.getElementById("header");
     const selected = document.getElementsByClassName(styles.selected_day)[0];
     const current = document.getElementsByClassName(styles.current_day)[0];
-
+    // if there is a calendar cell that the user clicked, reset the color of that cell to normal by setting "selectedDay" to null
     if(selected!=null){
-      console.log("selected is null")
       selected.style.backgroundColor = "transparent";
       this.setState({
-        seen: false,
+        showTablePopup: false,
         selectedDay: null
       },()=>{
         if(current!=null){
@@ -245,7 +250,7 @@ class Calendar extends Component {
         month.style.color = "white";
         year[0].style.color = "white";
         calendar.style.backgroundImage =
-          "url('../images/food4.jpg')";
+          "url('../images/calendarImage.jpg')";
         calendar.style.backgroundRepeat = "round";
         for (let i = 0; i < cells.length; i++) {
           cells[i].style.color = "white";
@@ -258,9 +263,10 @@ class Calendar extends Component {
 
       });
     }
+   // if there isn't a calendar cell that the user clicked, change state to close the table and bring back the background colors of the calendar
    else{
     this.setState({
-      seen: false} ,()=>{
+      showTablePopup: false} ,()=>{
 
         if(current!=null){
           current.style.backgroundColor = "lightblue";
@@ -269,7 +275,7 @@ class Calendar extends Component {
         month.style.color = "white";
         year[0].style.color = "white";
         calendar.style.backgroundImage =
-          "url('../images/food4.jpg')";
+          "url('../images/calendarImage.jpg')";
         calendar.style.backgroundRepeat = "round";
         for (let i = 0; i < cells.length; i++) {
           cells[i].style.color = "white";
@@ -308,7 +314,7 @@ class Calendar extends Component {
    
  
     this.setState({
-      seen: true,
+      showTablePopup: true,
       dateContext: dateContext,
       meal: e.target.value,
       selectedDay: null
@@ -379,22 +385,19 @@ class Calendar extends Component {
     let daysInMonth = [];
     //create all day slots of the calendar
     for (let d = 1; d <= this.daysInMonth(); d++) {
-      let param = {
-        Meal: "breakfast",
-        Date: ``
-      };
+    
       // different classname for selected day, current day, and other days
       let className =
-        d == this.state.today.get("date") &&
-        this.state.dateContext.get("year") == this.state.today.get("year") &&
-        this.state.dateContext.get("month") == this.state.today.get("month")
+        d === this.state.today.get("date") &&
+        this.state.dateContext.get("year") === this.state.today.get("year") &&
+        this.state.dateContext.get("month") === this.state.today.get("month")
           ? cx(styles.day, styles.current_day)
           : styles.day;
       
       let selectedClass =
-        d == this.state.selectedDay ? styles.selected_day : "";
+        d === this.state.selectedDay ? styles.selected_day : "";
       daysInMonth.push(
-            this.state.seen ? (
+            this.state.showTablePopup ? (
                <td
                key={d}
                className={cx(className, selectedClass)}
@@ -504,14 +507,18 @@ class Calendar extends Component {
               <tr id="header" className={styles.calendar_header}>
                 <td colSpan="1">
                   {" "}
-                  {this.state.seen ? (
+                  
+                  {this.state.showTablePopup ? (
                     <>
+                    
                       <a
                         id="leftArrow"
+                        href="#left"
                         className={cx(styles.darkArrow, styles.left)}
                       ></a>
                       <a
                         id="rightArrow"
+                        href="#right"
                         className={cx(styles.darkArrow, styles.right)}
                       ></a>
                     </>
@@ -520,12 +527,14 @@ class Calendar extends Component {
                       <a
                         id="leftArrow"
                         className={cx(styles.arrow, styles.left)}
+                        href="#left"
                         onClick={(e) => {
                           this.prevMonth();
                         }}
                       ></a>
                       <a
                         id="rightArrow"
+                        href="#right"
                         className={cx(styles.arrow, styles.right)}
                         onClick={(e) => {
                           this.nextMonth();
@@ -560,7 +569,7 @@ class Calendar extends Component {
               {trElems}
             </tbody>
           </table>
-          {this.state.seen ? (
+          {this.state.showTablePopup ? (
             <Table
               meal={this.state.meal}
               date={this.state.dateContext.format("YYYY-MM-DD")}
